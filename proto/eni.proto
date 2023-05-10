@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package dash.eni;
+
+import "types.proto";
+
+enum State{
+    STATE_DISABLED = 0;
+    STATE_ENABLED = 1;
+}
+
+message Eni {
+    string eni_id = 1;
+    bytes mac_address = 2;
+    string qos = 3;
+    types.IpAddress underlay_ip = 4;
+    eni.State admin_state = 5;
+    string vnet = 6;
+    optional types.IpPrefix pl_sip_encoding = 7;
+    optional types.IpAddress pl_underlay_sip = 8;
+    optional string v4_meter_policy_id = 9;
+    optional string v6_meter_policy_id = 10;
+}

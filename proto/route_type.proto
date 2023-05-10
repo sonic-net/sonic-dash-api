@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package dash.route_type;
+
+enum ActionType {
+    ACTION_TYPE_MAPROUTING = 0;
+    ACTION_TYPE_DIRECT = 1;
+    ACTION_TYPE_STATICENCAP = 2;
+    ACTION_TYPE_APPLIANCE = 3;
+    ACTION_TYPE_4_to_6 = 4;
+    ACTION_TYPE_MAPDECAP = 5;
+    ACTION_TYPE_DECAP = 6;
+    ACTION_TYPE_DROP = 7;
+}
+
+enum EncapType {
+    ENCAP_TYPE_VXLAN = 0;
+    ENCAP_TYPE_NVGRE = 1;
+}
+
+enum RoutingType {
+    ROUTING_TYPE_DIRECT = 0;
+    ROUTING_TYPE_VNET = 1;
+    ROUTING_TYPE_VNET_DIRECT = 2;
+    ROUTING_TYPE_VNET_ENCAP = 3;
+    ROUTING_TYPE_APPLIANCE = 4;
+    ROUTING_TYPE_PRIVATELINK = 5;
+    ROUTING_TYPE_PRIVATELINKNSG = 6;
+    ROUTING_TYPE_SERVICETUNNEL = 7;
+    ROUTING_TYPE_DROP = 8;
+}
+
+message RouteType {
+    string action_name = 1;
+    route_type.ActionType action_type = 2;
+    optional route_type.EncapType encap_type = 3;
+    optional uint32 vni = 4;
+}
+

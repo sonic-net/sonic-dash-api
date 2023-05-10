@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package dash.route_lpm;
+
+import "types.proto";
+import "route_type.proto";
+
+message ServiceTunnel {
+    types.IpAddress overlay_ip = 1;
+    types.IpAddress overlay_sip = 2;
+    types.IpAddress underlay_sip = 3;
+    types.IpAddress underlay_dip = 4;
+}
+
+message Route{
+    route_type.RoutingType action_type = 1;
+    oneof Action {
+        string vnet = 2;
+        string appliance = 3;
+        route_lpm.ServiceTunnel service_tunnel = 4;
+    }
+    optional uint64 metering_bucket = 5;
+}

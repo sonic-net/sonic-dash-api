@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package dash.tag;
+
+import "types.proto";
+
+message PrefixTag {
+    types.IpVersion ip_version = 1;
+    repeated types.IpPrefix prefix_list = 2;
+}
+

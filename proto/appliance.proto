@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package dash.appliance;
+
+import "types.proto";
+
+message Appliance {
+    types.IpAddress sip = 1;
+    uint32 vm_vni = 2;
+}

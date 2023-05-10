@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package dash.acl;
+
+import "types.proto";
+
+enum Action {
+    ACTION_DENY = 0;
+    ACTION_PERMIT = 1;
+}
+
+message AclIn {
+    string acl_group_id = 1;
+}
+
+message AclOut {
+    string acl_group_id = 1;
+}
+
+message AclGroup {
+    types.IpVersion ip_version = 1;
+    string guid = 2;
+}
+
+message AclRule {
+    uint32 priority = 1;
+    acl.Action action = 2;
+    bool terminating = 3;
+    repeated uint32 protocol = 4;
+    repeated string src_tag = 9;
+    repeated string dst_tag = 10;
+    repeated types.IpPrefix src_addr  = 5;
+    repeated types.IpPrefix dst_addr  = 6;
+    repeated types.ValueOrRange src_port = 7;
+    repeated types.ValueOrRange dst_port = 8;
+}

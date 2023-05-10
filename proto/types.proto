@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package dash.types;
+
+message IpAddress {
+  oneof ip {
+    fixed32 ipv4 = 1; // Network byte order (big-endian)
+    bytes ipv6 = 2; // Network byte order (big-endian)
+  }
+}
+
+message IpPrefix {
+  IpAddress ip = 1;
+  IpAddress mask = 2;
+}
+
+message Range {
+  uint32 min = 1;
+  uint32 max = 2;
+}
+
+message ValueOrRange {
+oneof value_or_range {
+  uint32 value = 1;
+  Range range = 2;
+}
+}
+
+enum IpVersion {
+  IP_VERSION_IPV4 = 0;
+  IP_VERSION_IPV6 = 1;
+}

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package dash.qos;
+
+message Qos {
+    string qos_id = 1;
+    uint32 bw = 2;
+    uint32 cps = 3;
+    uint32 flows = 4;
+}
