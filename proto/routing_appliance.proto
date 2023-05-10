@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package dash.routing_appliance;
+
+import "types.proto";
+import "route_type.proto";
+
+message RoutingAppliance {
+    string appliance_guid = 1;
+    repeated types.IpAddress addresses = 2;
+    route_type.EncapType encap_type = 3;
+    uint32 vni = 4;
+}
