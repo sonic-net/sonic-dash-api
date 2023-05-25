@@ -5,19 +5,45 @@ package dash.route_lpm;
 import "types.proto";
 import "route_type.proto";
 
+message VnetDirect {
+    // destination vnet name if action_type is {vnet, vnet_direct}, a vnet other than eni's vnet means vnet peering
+    string vnet = 1;
+    // overly_ip to lookup if routing_type is {vnet_direct}, use dst ip from packet if not specified
+    optional types.IpAddress overlay_ip = 2;
+}
+
 message ServiceTunnel {
-    types.IpAddress overlay_ip = 1;
-    types.IpAddress overlay_sip = 2;
+    // overlay ipv6 src ip if routing_type is {servicetunnel}
+    types.IpAddress overlay_sip = 1;
+    // overlay ipv6 dst ip if routing_type is {servicetunnel}
+    types.IpAddress overlay_dip = 2;
+    // underlay ipv4 src ip if routing_type is {servicetunnel}, this is the ST GW VIP (for ST traffic) or custom VIP
     types.IpAddress underlay_sip = 3;
+    // underlay ipv4 dst ip to override if routing_type is {servicetunnel}, use dst ip from packet if not specified
     types.IpAddress underlay_dip = 4;
 }
 
-message Route{
+message Route {
     route_type.RoutingType action_type = 1;
     oneof Action {
+        // destination vnet name if action_type is vnet,, a vnet other than eni's vnet means vnet peering
         string vnet = 2;
-        string appliance = 3;
-        route_lpm.ServiceTunnel service_tunnel = 4;
+        // destination vnet name if action_type is vnet_direct,, a vnet other than eni's vnet means vnet peering
+        string vnet_direct = 3;
+        // appliance id if action_type is {appliance} 
+        string appliance = 4;
+        // service tunnel if action_type is {service_tunnel}
+        route_lpm.ServiceTunnel service_tunnel = 5;
     }
-    optional uint64 metering_bucket = 5;
+    // Metering policy lookup enable (optional), default = false
+    optional bool metering_policy_en = 6;
+    // Metering class-id, used if metering policy lookup is not enabled
+    optional uint64 metering_class = 7;
+}
+
+// ENI route table with CA prefix for packet Outbound
+message RouteKey {
+    string eni = 1;
+    // IP prefix string with prefix length. E.G. 10.1.0.0/16
+    string prefix = 2;
 }

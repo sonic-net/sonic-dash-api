@@ -11,3 +11,8 @@ message RoutingAppliance {
     route_type.EncapType encap_type = 3;
     uint32 vni = 4;
 }
+
+message RoutingApplianceKey {
+    // Used for PL NSG
+    string appliance_id = 1;
+}

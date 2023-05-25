@@ -12,12 +12,29 @@ enum State{
 message Eni {
     string eni_id = 1;
     bytes mac_address = 2;
+    // Associated Qos profile
     string qos = 3;
+    // PA address for Inbound encapsulation to VM
     types.IpAddress underlay_ip = 4;
+    // Enabled after all configurations are applied
     eni.State admin_state = 5;
+    // Vnet that ENI belongs to
     string vnet = 6;
+    // Optional
+    // Private Link encoding for IPv6 SIP transpositions
     optional types.IpPrefix pl_sip_encoding = 7;
+    // Optional
+    // Underlay SIP (ST GW VIP) to be used for all private link transformation for this ENI
     optional types.IpAddress pl_underlay_sip = 8;
+    // Optional
+    // IPv4 meter policy ID
     optional string v4_meter_policy_id = 9;
+    // Optional
+    // IPv6 meter policy ID
     optional string v6_meter_policy_id = 10;
+}
+
+message EniKey {
+    // ENI MAC as key
+    string eni = 1;
 }

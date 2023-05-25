@@ -30,10 +30,24 @@ enum RoutingType {
     ROUTING_TYPE_DROP = 8;
 }
 
-message RouteType {
+message RouteTypeItem {
     string action_name = 1;
     route_type.ActionType action_type = 2;
+    // Optional
+    // encap type depends on the action_type - {vxlan, nvgre}
     optional route_type.EncapType encap_type = 3;
+    // Optional
+    // vni value associated with the corresponding action. Applicable if encap_type is specified. 
     optional uint32 vni = 4;
 }
 
+message RouteType {
+    repeated RouteTypeItem items = 1;
+}
+
+message RouteTypeKey {
+    // Available value has been enumerated at enum RoutingType.
+    // Use string as the key for better readability.
+    // Actions can be a list of action_types
+    string routing_type = 1;
+}

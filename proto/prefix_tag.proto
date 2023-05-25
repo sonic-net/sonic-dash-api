@@ -6,6 +6,11 @@ import "types.proto";
 
 message PrefixTag {
     types.IpVersion ip_version = 1;
+    // valid to have empty list of prefixes.
+    // If the prefix is empty, no packet will be assigned to this TAG.
     repeated types.IpPrefix prefix_list = 2;
 }
 
+message PrefixTagKey {
+    string tag_name = 1;
+}

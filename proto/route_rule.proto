@@ -5,11 +5,31 @@ package dash.route_rule;
 import "route_type.proto";
 
 message RouteRule {
+    // reference to routing type, action can be decap or drop
     route_type.RoutingType action_type = 1;
+    // priority of the rule, lower the value, higher the priority
     uint32 priority = 2;
+    // Optional
+    // protocol value of incoming packet to match; 0 (any)
     optional uint32 protocol = 3;
+    // Optional
+    // mapped VNET for the key vni/pa
     optional string vnet = 4;
+    // Optional
+    // perform PA validation in the mapping table belonging to vnet_name. Default is set to true
     optional bool pa_validation = 5;
-    optional uint64 metering_bucket = 6;
+    // Optional
+    // Metering class-id
+    optional uint64 metering_class = 6;
+    // Optional
+    // optional region_id which the vni/prefix belongs to as a string for any vendor optimizations
     optional string region = 7;
 }
+
+// ENI Inbound route table with VNI and optional SRC PA prefix
+message RouteRuleKey {
+    string eni = 1;
+    uint32 vni = 2;
+    // IP prefix string with prefix length. E.G. 10.1.0.0/16
+    string prefix = 3;
+};

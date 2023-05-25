@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package dash.acl_group;
+
+import "types.proto";
+
+message AclGroup {
+    types.IpVersion ip_version = 1;
+    string guid = 2;
+}
+
+message AclGroupKey {
+    string group_id = 1;
+}

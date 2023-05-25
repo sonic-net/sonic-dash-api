@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package dash.meter_policy;
+
+import "types.proto";
+
+message MeterPolicy {
+    // IP version (IPv4/IPv6)
+    types.IpVersion ip_version = 1;
+}
+
+message MeterPolicyKey {
+    string meter_policy_id = 1;
+}
