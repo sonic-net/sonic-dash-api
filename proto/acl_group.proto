@@ -6,7 +6,7 @@ import "types.proto";
 
 message AclGroup {
     types.IpVersion ip_version = 1;
-    string guid = 2;
+    types.Guid guid = 2;
 }
 
 message AclGroupKey {

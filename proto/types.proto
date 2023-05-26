@@ -30,3 +30,8 @@ enum IpVersion {
   IP_VERSION_IPV4 = 0;
   IP_VERSION_IPV6 = 1;
 }
+
+message Guid {
+  // 128 bits (16 bytes)
+  bytes value = 1;
+}

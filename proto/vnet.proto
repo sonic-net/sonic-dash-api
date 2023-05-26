@@ -6,7 +6,7 @@ import "types.proto";
 
 message Vnet {
     uint32 vni = 1;
-    string guid = 2;
+    types.Guid guid = 2;
     // Optional
     repeated types.IpPrefix address_space = 3;
     // Optional
