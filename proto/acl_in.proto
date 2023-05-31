@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package dash.acl_in;
+
+message AclIn {
+    // Optional
+    // IPv4 ACL group ID
+    string v4_acl_group_id = 1;
+    // Optional
+    // IPv6 ACL group ID
+    string v6_acl_group_id = 2;
+}
+
+message AclInKey {
+    string eni = 1;
+    // ACL stage can be {1, 2, 3, 4, 5}
+    uint32 stage = 2;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dash.appliance;
+
+import "types.proto";
+
+message Appliance {
+    // source ip address, to be used in encap
+    types.IpAddress sip = 1;
+    // VM VNI that is used for setting direction. Also used for inbound encap to VM
+    uint32 vm_vni = 2;
+}
+
+message ApplianceKey {
+    // Attributes specific for the appliance
+    string appliance_id = 1;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dash.qos;
+
+message Qos {
+    string qos_id = 1;
+    // bandwidth in kbps
+    uint32 bw = 2;
+    // Number of connection per second
+    uint32 cps = 3;
+    // Number of flows
+    uint32 flows = 4;
+}
+
+message QosKey {
+    string qos_name = 1;
+}

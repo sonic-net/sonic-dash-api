@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package dash.vnet;
+
+import "types.proto";
+
+message Vnet {
+    uint32 vni = 1;
+    types.Guid guid = 2;
+    // Optional
+    repeated types.IpPrefix address_space = 3;
+    // Optional
+    repeated string peer_list = 4;
+}
+
+message VnetKey {
+    string vnet_name = 1;
+}

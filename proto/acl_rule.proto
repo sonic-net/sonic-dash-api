@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package dash.acl_rule;
+
+import "types.proto";
+
+enum Action {
+    ACTION_DENY = 0;
+    ACTION_PERMIT = 1;
+}
+
+message AclRule {
+    // priority of the rule, lower the value, higher the priority
+    uint32 priority = 1;
+    // allow/deny
+    acl_rule.Action action = 2;
+    // true/false   ; if true, stop processing further rules
+    bool terminating = 3;
+    // Optional
+    // Protocol list. E.g. 6-tcp, 17-udp; if not provided, match on all protocols
+    repeated uint32 protocol = 4;
+    // Optional
+    // list of source tag name, if not provided, match on ANY tag or NO tag.
+    repeated string src_tag = 9;
+    // Optional
+    // list of destination tag name, if not provided, match on ANY tag or NO tag.
+    repeated string dst_tag = 10;
+    // Optional
+    // list of source ip prefixes, if not provided, match on all source IPs.
+    repeated types.IpPrefix src_addr  = 5;
+    // Optional
+    // list of destination ip prefixes, if not provided, match on all destination IPs.
+    repeated types.IpPrefix dst_addr  = 6;
+    // Optional
+    // list of range of source ports, if not provided, match on all source ports.
+    repeated types.ValueOrRange src_port = 7;
+    // Optional
+    // list of range of destination ports, if not provided, match on all destination ports.
+    repeated types.ValueOrRange dst_port = 8;
+}
+
+message AclRuleKey {
+    string group_id = 1;
+    // unique rule num within the group.
+    uint32 rule_num = 2;
+}

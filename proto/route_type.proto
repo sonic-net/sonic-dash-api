@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package dash.route_type;
+
+enum ActionType {
+    ACTION_TYPE_MAPROUTING = 0;
+    ACTION_TYPE_DIRECT = 1;
+    ACTION_TYPE_STATICENCAP = 2;
+    ACTION_TYPE_APPLIANCE = 3;
+    ACTION_TYPE_4_to_6 = 4;
+    ACTION_TYPE_MAPDECAP = 5;
+    ACTION_TYPE_DECAP = 6;
+    ACTION_TYPE_DROP = 7;
+}
+
+enum EncapType {
+    ENCAP_TYPE_VXLAN = 0;
+    ENCAP_TYPE_NVGRE = 1;
+}
+
+enum RoutingType {
+    ROUTING_TYPE_DIRECT = 0;
+    ROUTING_TYPE_VNET = 1;
+    ROUTING_TYPE_VNET_DIRECT = 2;
+    ROUTING_TYPE_VNET_ENCAP = 3;
+    ROUTING_TYPE_APPLIANCE = 4;
+    ROUTING_TYPE_PRIVATELINK = 5;
+    ROUTING_TYPE_PRIVATELINKNSG = 6;
+    ROUTING_TYPE_SERVICETUNNEL = 7;
+    ROUTING_TYPE_DROP = 8;
+}
+
+message RouteTypeItem {
+    string action_name = 1;
+    route_type.ActionType action_type = 2;
+    // Optional
+    // encap type depends on the action_type - {vxlan, nvgre}
+    optional route_type.EncapType encap_type = 3;
+    // Optional
+    // vni value associated with the corresponding action. Applicable if encap_type is specified. 
+    optional uint32 vni = 4;
+}
+
+message RouteType {
+    repeated RouteTypeItem items = 1;
+}
+
+message RouteTypeKey {
+    // Available value has been enumerated at enum RoutingType.
+    // Use string as the key for better readability.
+    // Actions can be a list of action_types
+    string routing_type = 1;
+}
