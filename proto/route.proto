@@ -29,7 +29,7 @@ message Route {
         // destination vnet name if action_type is vnet,, a vnet other than eni's vnet means vnet peering
         string vnet = 2;
         // destination vnet name if action_type is vnet_direct,, a vnet other than eni's vnet means vnet peering
-        string vnet_direct = 3;
+        route_lpm.VnetDirect vnet_direct = 3;
         // appliance id if action_type is {appliance} 
         string appliance = 4;
         // service tunnel if action_type is {service_tunnel}
