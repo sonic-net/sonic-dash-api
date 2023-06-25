@@ -22,4 +22,20 @@ This repository hosts the DASH API definition for the SONiC project. The schema 
 
 ## GNMI
 
-TODO
+```
+update { 
+    path { 
+        origin: "sonic_db" 
+        elem {name: "DPU0"} elem {name: "APPL_DB"} elem {name: "DASH_ACL_RULE_TABLE"} elem {name: "group1:3"} 
+    } 
+    val { 
+        proto_bytes: “\n\x010\x12$b6d54023-5d24-47de-ae94-8afe693dd1fc…” 
+    } 
+} 
+```
+1. GNMI path will have 4 elements, please refer to the above example
+2. The first element is device name, and it should be one of the following values: `localhost`, `DPU0`, `DPU1`, ..., `DPUx`
+3. The second element is SONiC database name, and it should be `APPL_DB` for DASH API
+4. The third element is table name, please refer to [DASH APP DB](https://github.com/sonic-net/DASH/blob/main/documentation/general/dash-sonic-hld.md#32-dash-app-db)
+5. The fourth element is table key. For example, in the `DASH_ACL_RULE_TABLE`, the table key consists of two fields: `group_id` and `rule_num`. These fields are separated by a colon `:` in the APPL_DB. Therefore, the fourth element would be `group1:3`
+6. GNMI value is the bytes array of protobuf
