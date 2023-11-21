@@ -28,6 +28,6 @@ test: dashapi.so compile_cpp_proto
 		-D PROTO_PATH=\"$(DASH_API_PROTO_DIR)\" \
 		-I $(BUILD_DIR) -I $(MISC_DIR) \
 		$(wildcard $(TEST_DIR)/*.cpp) \
-		-L$(BUILD_DIR) -Wl,--no-as-needed -l$(LIBDASHAPI) -Wl,--as-needed -lprotobuf -lgtest -lpthread -lboost_system -lboost_filesystem \
+		-L$(BUILD_DIR) -l$(LIBDASHAPI) -lprotobuf -lgtest -lpthread -lboost_system -lboost_filesystem \
 		-o $(TEST_DIR)/test
 	LD_LIBRARY_PATH=$(BUILD_DIR) $(TEST_DIR)/test
