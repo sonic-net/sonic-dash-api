@@ -87,3 +87,16 @@ TEST(Utils, InvalidJsonConversion)
 {
     EXPECT_THROW(JsonStringToPbBinary("DASH_ROUTE_RULE_TABLE", "invalid json"), runtime_error);
 }
+
+TEST(Utils, CInterface)
+{
+    char type_url[256];
+    EXPECT_EQ(TableNameToTypeUrl("DASH_ROUTE_RULE_TABLE", type_url, sizeof(type_url)), 32);
+    EXPECT_EQ(string(type_url), "sonic/dash.route_rule.RouteRule");
+
+    char json[256];
+    EXPECT_NO_THROW(PbBinaryToJsonString("DASH_ROUTE_RULE_TABLE", "", json, sizeof(json)));
+
+    char binary[256];
+    EXPECT_NO_THROW(JsonStringToPbBinary("DASH_ROUTE_RULE_TABLE", json, binary, sizeof(binary)));
+}

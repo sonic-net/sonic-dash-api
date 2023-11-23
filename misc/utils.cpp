@@ -99,3 +99,33 @@ string JsonStringToPbBinary(const string &table_name, const string &json) {
 }
 
 }
+
+size_t TableNameToTypeUrl(const char *table_name, char *type_url, size_t buffer_size)
+{
+    auto temp = dash::TableNameToTypeUrl(table_name);
+    size_t length = temp.size() + 1;
+    if (type_url != nullptr && buffer_size >= length) {
+        strncpy(type_url, temp.c_str(), length);
+    }
+    return length;
+}
+
+size_t PbBinaryToJsonString(const char *table_name, const char *binary, char *json, size_t buffer_size)
+{
+    auto temp = dash::PbBinaryToJsonString(table_name, binary);
+    size_t length = temp.size() + 1;
+    if (json != nullptr && buffer_size >= length) {
+        strncpy(json, temp.c_str(), length);
+    }
+    return length;
+}
+
+size_t JsonStringToPbBinary(const char *table_name, const char *json, char *binary, size_t buffer_size)
+{
+    auto temp = dash::JsonStringToPbBinary(table_name, json);
+    size_t length = temp.size() + 1;
+    if (binary != nullptr && buffer_size >= length) {
+        strncpy(binary, temp.c_str(), length);
+    }
+    return length;
+}
