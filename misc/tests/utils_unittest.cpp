@@ -94,9 +94,18 @@ TEST(Utils, CInterface)
     EXPECT_EQ(TableNameToTypeUrl("DASH_ROUTE_RULE_TABLE", type_url, sizeof(type_url)), 32);
     EXPECT_EQ(string(type_url), "sonic/dash.route_rule.RouteRule");
 
-    char json[256];
-    EXPECT_NO_THROW(PbBinaryToJsonString("DASH_ROUTE_RULE_TABLE", "", json, sizeof(json)));
+    const std::string json_str = 
+    "{\n"
+    " \"action_type\": \"ROUTING_TYPE_VNET\",\n"
+    " \"vnet\": \"Vnet2\"\n"
+    "}\n";
 
-    char binary[256];
-    EXPECT_NO_THROW(JsonStringToPbBinary("DASH_ROUTE_RULE_TABLE", json, binary, sizeof(binary)));
+    char binary[256] = {0};
+    size_t binary_size = 0;
+    EXPECT_NO_THROW(binary_size = JsonStringToPbBinary("DASH_ROUTE_TABLE", json_str.c_str(), binary, sizeof(binary)));
+    EXPECT_GT(binary_size, 0);
+
+    char json[256] = {0};
+    EXPECT_NO_THROW(PbBinaryToJsonString("DASH_ROUTE_TABLE", binary, binary_size, json, sizeof(json)));
+    EXPECT_EQ(string(json), json_str);
 }
