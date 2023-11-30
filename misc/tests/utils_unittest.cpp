@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <vector> 
 #include <utility>
 
 #include <boost/filesystem.hpp>
@@ -94,7 +95,7 @@ TEST(Utils, CInterface)
     EXPECT_EQ(TableNameToTypeUrl("DASH_ROUTE_RULE_TABLE", type_url, sizeof(type_url)), 32);
     EXPECT_EQ(string(type_url), "sonic/dash.route_rule.RouteRule");
 
-    const std::string json_str = 
+    const std::string json_str1 = 
     "{\n"
     " \"action_type\": \"ROUTING_TYPE_VNET\",\n"
     " \"vnet\": \"Vnet2\"\n"
@@ -102,10 +103,25 @@ TEST(Utils, CInterface)
 
     char binary[256] = {0};
     size_t binary_size = 0;
-    EXPECT_NO_THROW(binary_size = JsonStringToPbBinary("DASH_ROUTE_TABLE", json_str.c_str(), binary, sizeof(binary)));
+    EXPECT_NO_THROW(binary_size = JsonStringToPbBinary("DASH_ROUTE_TABLE", json_str1.c_str(), binary, sizeof(binary)));
     EXPECT_GT(binary_size, 0);
 
     char json[256] = {0};
     EXPECT_NO_THROW(PbBinaryToJsonString("DASH_ROUTE_TABLE", binary, binary_size, json, sizeof(json)));
-    EXPECT_EQ(string(json), json_str);
+    EXPECT_EQ(string(json), json_str1);
+
+    const std::string json_str2 =
+    "{\n"
+    " \"sip\": {\n"
+    "  \"ipv4\": 16777482\n"
+    " },\n"
+    " \"vm_vni\": 4321\n"
+    "}\n";
+
+    binary_size = 0;
+    EXPECT_NO_THROW(binary_size = JsonStringToPbBinary("DASH_APPLIANCE_TABLE", json_str2.c_str(), binary, sizeof(binary)));
+    EXPECT_GT(binary_size, 0);
+
+    EXPECT_NO_THROW(PbBinaryToJsonString("DASH_APPLIANCE_TABLE", binary, binary_size, json, sizeof(json)));
+    EXPECT_EQ(string(json), json_str2);
 }

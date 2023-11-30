@@ -105,7 +105,7 @@ size_t TableNameToTypeUrl(const char *table_name, char *type_url, size_t buffer_
     auto temp = dash::TableNameToTypeUrl(table_name);
     size_t length = temp.size() + 1;
     if (type_url != nullptr && buffer_size >= length) {
-        strncpy(type_url, temp.c_str(), length);
+        memcpy(type_url, temp.c_str(), length);
     }
     return length;
 }
@@ -115,7 +115,7 @@ size_t PbBinaryToJsonString(const char *table_name, const char *binary, size_t b
     auto temp = dash::PbBinaryToJsonString(table_name, std::string(binary, binary_buffer_size));
     size_t length = temp.size() + 1;
     if (json != nullptr && json_buffer_size >= length) {
-        strncpy(json, temp.c_str(), length);
+        memcpy(json, temp.c_str(), length);
     }
     return length;
 }
@@ -123,9 +123,9 @@ size_t PbBinaryToJsonString(const char *table_name, const char *binary, size_t b
 size_t JsonStringToPbBinary(const char *table_name, const char *json, char *binary, size_t buffer_size)
 {
     auto temp = dash::JsonStringToPbBinary(table_name, json);
-    size_t length = temp.size() + 1;
+    size_t length = temp.size();
     if (binary != nullptr && buffer_size >= length) {
-        strncpy(binary, temp.c_str(), length);
+        memcpy(binary, temp.c_str(), length);
     }
     return length;
 }
