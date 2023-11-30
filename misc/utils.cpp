@@ -110,11 +110,11 @@ size_t TableNameToTypeUrl(const char *table_name, char *type_url, size_t buffer_
     return length;
 }
 
-size_t PbBinaryToJsonString(const char *table_name, const char *binary, char *json, size_t buffer_size)
+size_t PbBinaryToJsonString(const char *table_name, const char *binary, size_t binary_buffer_size, char *json, size_t json_buffer_size)
 {
-    auto temp = dash::PbBinaryToJsonString(table_name, binary);
+    auto temp = dash::PbBinaryToJsonString(table_name, std::string(binary, binary_buffer_size));
     size_t length = temp.size() + 1;
-    if (json != nullptr && buffer_size >= length) {
+    if (json != nullptr && json_buffer_size >= length) {
         strncpy(json, temp.c_str(), length);
     }
     return length;
