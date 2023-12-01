@@ -40,6 +40,9 @@ jobs:
     workingDirectory: $(Build.ArtifactStagingDirectory)
     displayName: "Install protobuf"
   - script: |
-      cd misc/tests
-      make all
-    displayName: "Build and check sonic-dash-api"
+      mkdir -p package
+      dpkg-buildpackage -rfakeroot -us -uc -b -j$(nproc)
+      cp ../*.deb package/
+    displayName: "Build sonic-dash-api"
+  - publish: $(System.DefaultWorkingDirectory)/package
+    artifact: sonic-dash-api
