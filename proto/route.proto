@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package dash.route_lpm;
+package dash.route;
 
 import "types.proto";
 import "route_type.proto";
@@ -29,11 +29,11 @@ message Route {
         // destination vnet name if action_type is vnet,, a vnet other than eni's vnet means vnet peering
         string vnet = 2;
         // destination vnet name if action_type is vnet_direct,, a vnet other than eni's vnet means vnet peering
-        string vnet_direct = 3;
+        route.VnetDirect vnet_direct = 3;
         // appliance id if action_type is {appliance} 
         string appliance = 4;
         // service tunnel if action_type is {service_tunnel}
-        route_lpm.ServiceTunnel service_tunnel = 5;
+        route.ServiceTunnel service_tunnel = 5;
     }
     // Metering policy lookup enable (optional), default = false
     optional bool metering_policy_en = 6;
