@@ -16,6 +16,7 @@ MISC_DIR := misc
 PYPKG_DIR := $(MISC_DIR)/pypkg/$(PKGNAME)
 TEST_DIR := $(MISC_DIR)/tests
 INSTALLED_HEADER_DIR := $(DESTDIR)/usr/include/$(PKGNAME)
+INSTALLED_BIN := $(DESTDIR)/usr/bin
 INSTALLED_LIB_DIR := $(DESTDIR)/usr/lib
 INSTALLED_PYTHON_DIR := $(DESTDIR)/usr/lib/python3/dist-packages/$(PKGNAME)
 
@@ -51,6 +52,10 @@ install:
 	$(CP) $(PYPKG_DIR) $(INSTALLED_PYTHON_DIR)
 
 	$(CP) $(PYPKG_DIR)/_utils.so $(INSTALLED_PYTHON_DIR)
+
+	$(MKDIR) -p $(INSTALLED_BIN)
+	$(CP) $(MISC_DIR)/dash_api_utils $(INSTALLED_BIN)
+	chmod +x $(INSTALLED_BIN)/dash_api_utils
 
 uninstall:
 	$(RM) $(INSTALLED_HEADER_DIR)
