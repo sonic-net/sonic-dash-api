@@ -6,19 +6,20 @@ RM := rm -rf
 CP := cp -rf
 MKDIR := mkdir
 MV := mv
+PKGNAME := dash_api
 LIBNAME := dashapi
 LIBDASHAPI := lib$(LIBNAME).so
 BUILD_DIR := build
 DESTDIR := 
 DASH_API_PROTO_DIR := proto
 MISC_DIR := misc
-PYPKG_DIR := $(MISC_DIR)/pypkg
+PYPKG_DIR := $(MISC_DIR)/pypkg/$(PKGNAME)
 TEST_DIR := $(MISC_DIR)/tests
-INSTALLED_HEADER_DIR := $(DESTDIR)/usr/include/dash_api
+INSTALLED_HEADER_DIR := $(DESTDIR)/usr/include/$(PKGNAME)
 INSTALLED_LIB_DIR := $(DESTDIR)/usr/lib
-INSTALLED_PYTHON_DIR := $(DESTDIR)/usr/lib/python3/dist-packages/dash_api
+INSTALLED_PYTHON_DIR := $(DESTDIR)/usr/lib/python3/dist-packages/$(PKGNAME)
 
-all: compile_cpp_proto dashapi.so compile_py_proto
+all: compile_cpp_proto dashapi.so compile_py_proto swig
 
 compile_cpp_proto:
 	$(MKDIR) -p $(BUILD_DIR)
@@ -30,6 +31,10 @@ dashapi.so: compile_cpp_proto
 compile_py_proto:
 	protoc -I=$(DASH_API_PROTO_DIR) --python_out=$(PYPKG_DIR) $(DASH_API_PROTO_DIR)/*.proto
 
+swig:
+	swig -c++ -python -py3 -outdir $(PYPKG_DIR) -o $(BUILD_DIR)/utils_wrap.cpp $(MISC_DIR)/utils.i
+	g++ -std=c++14 -shared -I/usr/include/python3.8 -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) -lpython3.8 -lprotobuf
+
 clean:
 	$(RM) $(BUILD_DIR)
 	$(RM) $(PYPKG_DIR)/*_pb2.py
@@ -38,10 +43,14 @@ install:
 	$(MKDIR) -p $(INSTALLED_HEADER_DIR)
 	$(CP) $(BUILD_DIR)/*.pb.h $(INSTALLED_HEADER_DIR)
 	$(CP) $(MISC_DIR)/*.h $(INSTALLED_HEADER_DIR)
+
 	$(MKDIR) -p $(INSTALLED_LIB_DIR)
 	$(CP) $(BUILD_DIR)/$(LIBDASHAPI) $(INSTALLED_LIB_DIR)
+
 	$(MKDIR) -p $(INSTALLED_PYTHON_DIR)
-	$(CP) $(PYPKG_DIR)/* $(INSTALLED_PYTHON_DIR)
+	$(CP) $(PYPKG_DIR) $(INSTALLED_PYTHON_DIR)
+
+	$(CP) $(PYPKG_DIR)/_utils.so $(INSTALLED_PYTHON_DIR)
 
 uninstall:
 	$(RM) $(INSTALLED_HEADER_DIR)
@@ -58,3 +67,5 @@ test: dashapi.so compile_cpp_proto
 	LD_LIBRARY_PATH=$(BUILD_DIR) $(TEST_DIR)/test
 
 .PHONY: uninstall clean
+
+# swig -c++ -python -py3 utils.i && g++ -shared -I/usr/include/python3.8 -fPIC -o _utils.so utils_wrap.cxx utils.cpp -lpython3.8 -Wl,--no-as-needed  -ldashapi -Wl,--as-needed  -lprotobuf
