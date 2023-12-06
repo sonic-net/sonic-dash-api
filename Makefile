@@ -19,6 +19,8 @@ INSTALLED_HEADER_DIR := $(DESTDIR)/usr/include/$(PKGNAME)
 INSTALLED_BIN := $(DESTDIR)/usr/bin
 INSTALLED_LIB_DIR := $(DESTDIR)/usr/lib
 INSTALLED_PYTHON_DIR := $(DESTDIR)/usr/lib/python3/dist-packages/$(PKGNAME)
+PYINCLUDE := $(shell python3 -c "import sys; import sysconfig; sys.stdout.write(sysconfig.get_config_var('INCLUDEPY'))")
+PYLIBRARY := $(shell python3 -c "import sys; import sysconfig; sys.stdout.write(sysconfig.get_config_var('BLDLIBRARY'))")
 
 all: compile_cpp_proto dashapi.so compile_py_proto swig
 
@@ -34,7 +36,7 @@ compile_py_proto:
 
 swig:
 	swig -c++ -python -py3 -outdir $(PYPKG_DIR) -o $(BUILD_DIR)/utils_wrap.cpp $(MISC_DIR)/utils.i
-	g++ -std=c++14 -shared -I/usr/include/python3.8 -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) -lpython3.8 -lprotobuf
+	g++ -std=c++14 -shared -I$(PYINCLUDE) -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) $(PYLIBRARY) -lprotobuf
 
 clean:
 	$(RM) $(BUILD_DIR)
