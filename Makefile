@@ -72,7 +72,7 @@ test: dashapi.so compile_cpp_proto
 		-L$(BUILD_DIR) -l$(LIBNAME) -lprotobuf -lgtest -lpthread -lboost_system -lboost_filesystem \
 		-o $(TEST_DIR)/test
 	LD_LIBRARY_PATH=$(BUILD_DIR) $(TEST_DIR)/test
-	python -m pytest
+	python3 -m pytest
 
 .PHONY: uninstall clean
 
