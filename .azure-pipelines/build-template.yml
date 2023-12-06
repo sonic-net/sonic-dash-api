@@ -41,7 +41,7 @@ jobs:
   steps:
   - script: |
       sudo apt-get update
-      sudo apt-get install -y make libboost-all-dev libgtest-dev build-essential
+      sudo apt-get install -y make libboost-all-dev libgtest-dev build-essential swig4.0
     displayName: "Install dependencies"
   - task: DownloadPipelineArtifact@2
     inputs:
