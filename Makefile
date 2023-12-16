@@ -75,5 +75,3 @@ test: dashapi.so compile_cpp_proto
 	python3 -m pytest
 
 .PHONY: uninstall clean
-
-# swig -c++ -python -py3 utils.i && g++ -shared -I/usr/include/python3.8 -fPIC -o _utils.so utils_wrap.cxx utils.cpp -lpython3.8 -Wl,--no-as-needed  -ldashapi -Wl,--as-needed  -lprotobuf
