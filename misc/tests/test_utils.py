@@ -26,7 +26,7 @@ def test_dash_api_utils():
 }
     '''
     result = runner.invoke(utils_cli.utils_cli,
-                           ['--to_pb', '-t', 'DASH_APPLIANCE_TABLE'],
+                           ['--to_proto', '-t', 'DASH_APPLIANCE_TABLE'],
                            input=appliance_json_str)
     assert result.exit_code == 0
 

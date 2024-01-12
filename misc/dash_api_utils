@@ -9,7 +9,7 @@ import dash_api.utils as utils
 @click.command()
 @click.option("--to_json", "transformation", flag_value="json", default=True,
               show_default=True, help="Convert input content to json.")
-@click.option("--to_pb", "transformation", flag_value="pb",
+@click.option("--to_proto", "transformation", flag_value="pb",
               help="Convert input content to protobuf.")
 @click.option("--table_name", "-t", type=str, required=True,
               help="This string represents the name of the DPU table, such as "
