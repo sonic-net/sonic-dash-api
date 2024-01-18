@@ -1,2 +1,9 @@
-pypkg/*_pb2.py
+pypkg/**/*
+!pypkg/dash_api
+!pypkg/dash_api/__init__.py
 tests/test
+**/__pycache__/*
+*.so
+_*.*
+*_wrap.cxx
+*.bin
