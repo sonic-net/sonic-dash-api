@@ -5,8 +5,9 @@ package dash.acl_rule;
 import "types.proto";
 
 enum Action {
-    ACTION_DENY = 0;
-    ACTION_PERMIT = 1;
+    ACTION_UNSPECIFIED = 0;
+    ACTION_DENY = 1;
+    ACTION_PERMIT = 2;
 }
 
 message AclRule {

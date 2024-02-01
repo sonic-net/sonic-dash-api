@@ -5,8 +5,9 @@ package dash.eni;
 import "types.proto";
 
 enum State{
-    STATE_DISABLED = 0;
-    STATE_ENABLED = 1;
+    STATE_UNSPECIFIED = 0;
+    STATE_DISABLED = 1;
+    STATE_ENABLED = 2;
 }
 
 message Eni {
