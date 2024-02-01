@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+import click
+import sys
+
+import dash_api.utils as utils
+
+
+@click.command()
+@click.option("--to_json", "transformation", flag_value="json", default=True,
+              show_default=True, help="Convert input content to json.")
+@click.option("--to_proto", "transformation", flag_value="pb",
+              help="Convert input content to protobuf.")
+@click.option("--table_name", "-t", type=str, required=True,
+              help="This string represents the name of the DPU table, such as "
+              "DASH_APPLIANCE_TABLE. If an object key is provided as input, "
+              "the table name will be derived from the key's prefix.")
+def utils_cli(transformation: str, table_name: str):
+    """
+    Perform a transformation on input data based on the specified
+    transformation type.
+
+    Args:
+        transformation (str): The type of transformation to perform. Valid
+                              values are "json" and "pb".
+        table_name (str): The name of the table.
+
+    Raises:
+        ValueError: If an invalid transformation type is provided.
+
+    Returns:
+        None
+    """
+    table_name = table_name.replace("|", ":").split(":")[0]
+    if transformation == "json":
+        binary = sys.stdin.buffer.read()
+        json_str = utils.PbBinaryToJsonString(
+            table_name.encode("utf-8"), binary)
+        click.echo(json_str)
+    elif transformation == "pb":
+        json_str = sys.stdin.read()
+        binary = utils.JsonStringToPbBinary(table_name.encode("utf-8"),
+                                            json_str.encode("utf-8"))
+        sys.stdout.buffer.write(binary)
+
+
+if __name__ == '__main__':
+    utils_cli()
