@@ -30,6 +30,9 @@ message VnetMapping {
     // Optional
     // overlay dst ip if routing_type is {privatelink} 
     optional types.IpAddress overlay_dip = 9;
+    // Optional
+    // ID of routing appliance if routing_type is {privatelinknsg}
+    optional uint32 routing_appliance_id = 10;
 }
 
 // CA-PA mapping table for Vnet

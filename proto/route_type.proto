@@ -39,6 +39,9 @@ message RouteTypeItem {
     // Optional
     // vni value associated with the corresponding action. Applicable if encap_type is specified. 
     optional uint32 vni = 4;
+    // Optional
+    // tunnel key value associated with the corresponding action. Applicable if encap_type is specified.
+    optional uint32 tunnel_key = 5;
 }
 
 message RouteType {
