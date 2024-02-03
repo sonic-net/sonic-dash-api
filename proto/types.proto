@@ -27,8 +27,9 @@ oneof value_or_range {
 }
 
 enum IpVersion {
-  IP_VERSION_IPV4 = 0;
-  IP_VERSION_IPV6 = 1;
+  IP_VERSION_UNSPECIFIED = 0;
+  IP_VERSION_IPV4 = 1;
+  IP_VERSION_IPV6 = 2;
 }
 
 message Guid {

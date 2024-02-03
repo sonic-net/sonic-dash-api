@@ -7,7 +7,7 @@ import "route_type.proto";
 
 message VnetMapping {
     // reference to routing type
-    route_type.RoutingType action_type = 1;
+    route_type.RoutingType routing_type = 1;
     // PA address for the CA
     types.IpAddress underlay_ip = 2;
     // Optional
