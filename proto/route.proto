@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package dash.route_lpm;
+package dash.route;
 
 import "types.proto";
 import "route_type.proto";
