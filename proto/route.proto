@@ -6,7 +6,7 @@ import "types.proto";
 import "route_type.proto";
 
 message VnetDirect {
-    // destination vnet name if action_type is {vnet, vnet_direct}, a vnet other than eni's vnet means vnet peering
+    // destination vnet name if routing_type is {vnet, vnet_direct}, a vnet other than eni's vnet means vnet peering
     string vnet = 1;
     // overly_ip to lookup if routing_type is {vnet_direct}, use dst ip from packet if not specified
     optional types.IpAddress overlay_ip = 2;
@@ -24,15 +24,15 @@ message ServiceTunnel {
 }
 
 message Route {
-    route_type.RoutingType action_type = 1;
+    route_type.RoutingType routing_type = 1;
     oneof Action {
-        // destination vnet name if action_type is vnet,, a vnet other than eni's vnet means vnet peering
+        // destination vnet name if routing_type is vnet,, a vnet other than eni's vnet means vnet peering
         string vnet = 2;
-        // destination vnet name if action_type is vnet_direct,, a vnet other than eni's vnet means vnet peering
+        // destination vnet name if routing_type is vnet_direct,, a vnet other than eni's vnet means vnet peering
         route_lpm.VnetDirect vnet_direct = 3;
-        // appliance id if action_type is {appliance} 
+        // appliance id if routing_type is {appliance} 
         string appliance = 4;
-        // service tunnel if action_type is {service_tunnel}
+        // service tunnel if routing_type is {service_tunnel}
         route_lpm.ServiceTunnel service_tunnel = 5;
     }
     // Metering policy lookup enable (optional), default = false
