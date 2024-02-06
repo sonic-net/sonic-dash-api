@@ -40,7 +40,7 @@ message RouteTypeItem {
     // encap type depends on the action_type - {vxlan, nvgre}
     optional route_type.EncapType encap_type = 3;
     // Optional
-    // vni value associated with the corresponding action. Applicable if encap_type is specified. 
+    // vni value to be used as the key for encapsulation. Applicable if encap_type is specified. 
     optional uint32 vni = 4;
 }
 
