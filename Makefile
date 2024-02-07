@@ -33,6 +33,7 @@ dashapi.so: compile_cpp_proto
 
 compile_py_proto:
 	protoc -I=$(DASH_API_PROTO_DIR) --python_out=$(PYPKG_DIR) $(DASH_API_PROTO_DIR)/*.proto
+	protoc -I=$(DASH_API_PROTO_DIR) --pyi_out=$(PYPKG_DIR) $(DASH_API_PROTO_DIR)/*.proto
 
 swig:
 	swig -c++ -python -py3 -outdir $(PYPKG_DIR) -o $(BUILD_DIR)/utils_wrap.cpp $(MISC_DIR)/utils.i
@@ -52,6 +53,7 @@ install:
 
 	$(MKDIR) -p $(INSTALLED_PYTHON_DIR)
 	$(CP) $(PYPKG_DIR)/*.py $(INSTALLED_PYTHON_DIR)
+	$(CP) $(PYPKG_DIR)/*.pyi $(INSTALLED_PYTHON_DIR)
 
 	$(CP) $(PYPKG_DIR)/_utils.so $(INSTALLED_PYTHON_DIR)
 
