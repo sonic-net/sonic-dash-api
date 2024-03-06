@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package dash.pa_validation;
+
+import "types.proto";
+
+message PaValidation {
+    repeated types.IpAddress addresses = 1;
+}
+
+message PaValidationKey {
+    string vni = 1;
+}
