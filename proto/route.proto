@@ -43,7 +43,7 @@ message Route {
 
 // ENI route table with CA prefix for packet Outbound
 message RouteKey {
-    string eni = 1;
+    string group_id = 1;
     // IP prefix string with prefix length. E.G. 10.1.0.0/16
     string prefix = 2;
 }
