@@ -38,6 +38,7 @@ TEST(Utils, ValidUrlConversion)
         {"sonic/dash.route_type.RouteType", "DASH_ROUTE_TYPE_TABLE"},
         {"sonic/dash.route.Route", "DASH_ROUTE_TABLE"},
         {"sonic/dash.routing_appliance.RoutingAppliance", "DASH_ROUTING_APPLIANCE_TABLE"},
+        {"sonic/dash.tunnel.Tunnel", "DASH_TUNNEL_TABLE"},
         {"sonic/dash.vnet_mapping.VnetMapping", "DASH_VNET_MAPPING_TABLE"},
         {"sonic/dash.vnet.Vnet", "DASH_VNET_TABLE"},
     };
@@ -100,7 +101,7 @@ TEST(Utils, CInterface)
 
     const std::string json_str1 = 
     "{\n"
-    " \"action_type\": \"ROUTING_TYPE_VNET\",\n"
+    " \"routing_type\": \"ROUTING_TYPE_VNET\",\n"
     " \"vnet\": \"Vnet2\"\n"
     "}\n";
 

@@ -6,7 +6,7 @@ import "route_type.proto";
 
 message RouteRule {
     // reference to routing type, action can be decap or drop
-    route_type.RoutingType action_type = 1;
+    route_type.RoutingType routing_type = 1;
     // priority of the rule, lower the value, higher the priority
     uint32 priority = 2;
     // Optional
@@ -19,11 +19,12 @@ message RouteRule {
     // perform PA validation in the mapping table belonging to vnet_name. Default is set to true
     optional bool pa_validation = 5;
     // Optional
-    // Metering class-id
-    optional uint64 metering_class = 6;
+    // Metering class aggregate bits
+    optional uint32 metering_class_or = 6;
+    optional uint32 metering_class_and = 7;
     // Optional
     // optional region_id which the vni/prefix belongs to as a string for any vendor optimizations
-    optional string region = 7;
+    optional string region = 8;
 }
 
 // ENI Inbound route table with VNI and optional SRC PA prefix

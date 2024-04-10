@@ -7,7 +7,7 @@ import "route_type.proto";
 
 message VnetMapping {
     // reference to routing type
-    route_type.RoutingType action_type = 1;
+    route_type.RoutingType routing_type = 1;
     // PA address for the CA
     types.IpAddress underlay_ip = 2;
     // Optional
@@ -15,24 +15,20 @@ message VnetMapping {
     optional bytes mac_address = 3;
     // Optional
     // metering class-id
-    optional uint64 metering_class = 4;
-    // Optional
-    // override the metering class-id coming from the route table
-    optional bool override_meter = 5;
+    optional uint32 metering_class_or = 4;
     // Optional
     // if true, use the destination VNET VNI for encap. If false or not specified, use source VNET's VNI
-    optional bool use_dst_vni = 6;
+    optional bool use_dst_vni = 5;
     // Optional
-    optional bool use_pl_sip_eni = 7;
+    optional bool use_pl_sip_eni = 6;
     // Optional
     // overlay src ip if routing_type is {privatelink}
-    optional types.IpAddress overlay_sip = 8;
+    optional types.IpPrefix overlay_sip_prefix = 7;
     // Optional
     // overlay dst ip if routing_type is {privatelink} 
-    optional types.IpAddress overlay_dip = 9;
+    optional types.IpPrefix overlay_dip_prefix = 8;
     // Optional
-    // ID of routing appliance if routing_type is {privatelinknsg}
-    optional uint32 routing_appliance_id = 10;
+    optional string tunnel = 9;
 }
 
 // CA-PA mapping table for Vnet

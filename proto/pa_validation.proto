@@ -9,5 +9,5 @@ message PaValidation {
 }
 
 message PaValidationKey {
-    string vni = 1;
+    uint32 vni = 1;
 }
