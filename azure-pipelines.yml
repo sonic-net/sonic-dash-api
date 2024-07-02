@@ -26,7 +26,7 @@ stages:
   - template: .azure-pipelines/build-template.yml
     parameters:
       arch: amd64
-      pool: sonic-ubuntu-1c
+      pool: sonicbld-1es
       sonic_slave: sonic-slave-${{ parameters.debian_version }}
       debian_version: ${{ parameters.debian_version }}
       artifact_name: sonic-dash-api
