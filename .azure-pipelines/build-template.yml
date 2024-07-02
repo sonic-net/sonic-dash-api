@@ -10,7 +10,7 @@ parameters:
 - name: pool
   type: string
   values:
-  - sonicbld
+  - sonic-ubuntu-1c
   - sonicbld-armhf
   - sonicbld-arm64
   - default
