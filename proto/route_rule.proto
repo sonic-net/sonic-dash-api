@@ -5,8 +5,8 @@ package dash.route_rule;
 import "route_type.proto";
 
 message RouteRule {
-    // reference to routing type, action can be decap or drop
-    route_type.RoutingType action_type = 1;
+    // reference to action type, action can be decap or drop
+    route_type.ActionType action_type = 1;
     // priority of the rule, lower the value, higher the priority
     uint32 priority = 2;
     // Optional
