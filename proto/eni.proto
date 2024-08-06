@@ -33,6 +33,7 @@ message Eni {
     // Optional
     // IPv6 meter policy ID
     optional string v6_meter_policy_id = 10;
+    optional bool disable_fast_path_icmp_flow_redirection = 11;
 }
 
 message EniKey {
