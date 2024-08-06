@@ -24,7 +24,7 @@ message ServiceTunnel {
 }
 
 message Route {
-    route_type.RoutingType routing_type = 1;
+    route_type.RoutingType action_type = 1 [deprecated = true]; // renamed as routing_type
     oneof Action {
         // destination vnet name if routing_type is vnet,, a vnet other than eni's vnet means vnet peering
         string vnet = 2;
@@ -37,11 +37,13 @@ message Route {
     }
     optional uint32 metering_class_or = 6;
     optional uint32 metering_class_and = 7;
+    route_type.RoutingType routing_type = 8;
 }
 
 // ENI route table with CA prefix for packet Outbound
 message RouteKey {
-    string group_id = 1;
+    string eni = 1 [deprecated = true]; // renamed as group_id 
     // IP prefix string with prefix length. E.G. 10.1.0.0/16
     string prefix = 2;
+    string group_id = 3;
 }
