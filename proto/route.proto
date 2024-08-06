@@ -35,9 +35,11 @@ message Route {
         // service tunnel if routing_type is {service_tunnel}
         route.ServiceTunnel service_tunnel = 5;
     }
-    optional uint32 metering_class_or = 6;
-    optional uint32 metering_class_and = 7;
-    route_type.RoutingType routing_type = 8;
+    optional bool metering_policy_en = 6 [deprecated = true];
+    optional uint64 metering_class = 7 [deprecated = true];
+    optional uint32 metering_class_or = 8;
+    optional uint32 metering_class_and = 9;
+    route_type.RoutingType routing_type = 10;
 }
 
 // ENI route table with CA prefix for packet Outbound
