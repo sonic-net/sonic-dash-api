@@ -22,14 +22,17 @@ message Eni {
     // Vnet that ENI belongs to
     string vnet = 6;
     // Optional
+    // Private Link encoding for IPv6 SIP transpositions
+    optional types.IpPrefix pl_sip_encoding = 7;
+    // Optional
     // Underlay SIP (ST GW VIP) to be used for all private link transformation for this ENI
-    optional types.IpAddress pl_underlay_sip = 7;
+    optional types.IpAddress pl_underlay_sip = 8;
     // Optional
     // IPv4 meter policy ID
-    optional string v4_meter_policy_id = 8;
+    optional string v4_meter_policy_id = 9;
     // Optional
     // IPv6 meter policy ID
-    optional string v6_meter_policy_id = 9;
+    optional string v6_meter_policy_id = 10;
 }
 
 message EniKey {
