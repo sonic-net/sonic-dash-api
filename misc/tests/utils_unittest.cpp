@@ -101,6 +101,7 @@ TEST(Utils, CInterface)
 
     const std::string json_str1 = 
     "{\n"
+    " \"action_type\": \"ROUTING_TYPE_UNSPECIFIED\",\n"
     " \"routing_type\": \"ROUTING_TYPE_VNET\",\n"
     " \"vnet\": \"Vnet2\"\n"
     "}\n";
