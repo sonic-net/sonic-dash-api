@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package dash.eni_route;
+
+message EniRoute {
+    // Group ID in DASH_ROUTE_GROUP_TABLE
+    string group_id = 1;      
+}
+
+message EniRouteKey {
+    string eni = 1;
+}

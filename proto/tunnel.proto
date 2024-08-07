@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package dash.tunnel;
+
+import "route_type.proto";
+import "types.proto";
+
+message Tunnel {
+    repeated types.IpAddress endpoints = 1;
+    route_type.EncapType encap_type = 2;
+    uint32 vni = 3;
+    optional uint32 metering_class_or = 4;
+}
+
+// ENI Inbound route table with VNI and optional SRC PA prefix
+message TunnelKey {
+    string tunnel_name = 1;
+};

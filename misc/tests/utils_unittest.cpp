@@ -26,15 +26,19 @@ TEST(Utils, ValidUrlConversion)
         {"sonic/dash.acl_rule.AclRule", "DASH_ACL_RULE_TABLE"},
         {"sonic/dash.appliance.Appliance", "DASH_APPLIANCE_TABLE"},
         {"sonic/dash.eni.Eni", "DASH_ENI_TABLE"},
+        {"sonic/dash.eni_route.EniRoute", "DASH_ENI_ROUTE_TABLE"},
         {"sonic/dash.meter_policy.MeterPolicy", "DASH_METER_POLICY_TABLE"},
         {"sonic/dash.meter_rule.MeterRule", "DASH_METER_RULE_TABLE"},
         {"sonic/dash.meter.Meter", "DASH_METER_TABLE"},
+        {"sonic/dash.pa_validation.PaValidation", "DASH_PA_VALIDATION_TABLE"},
         {"sonic/dash.prefix_tag.PrefixTag", "DASH_PREFIX_TAG_TABLE"},
         {"sonic/dash.qos.Qos", "DASH_QOS_TABLE"},
+        {"sonic/dash.route_group.RouteGroup", "DASH_ROUTE_GROUP_TABLE"},
         {"sonic/dash.route_rule.RouteRule", "DASH_ROUTE_RULE_TABLE"},
         {"sonic/dash.route_type.RouteType", "DASH_ROUTE_TYPE_TABLE"},
         {"sonic/dash.route.Route", "DASH_ROUTE_TABLE"},
         {"sonic/dash.routing_appliance.RoutingAppliance", "DASH_ROUTING_APPLIANCE_TABLE"},
+        {"sonic/dash.tunnel.Tunnel", "DASH_TUNNEL_TABLE"},
         {"sonic/dash.vnet_mapping.VnetMapping", "DASH_VNET_MAPPING_TABLE"},
         {"sonic/dash.vnet.Vnet", "DASH_VNET_TABLE"},
     };
@@ -97,7 +101,8 @@ TEST(Utils, CInterface)
 
     const std::string json_str1 = 
     "{\n"
-    " \"action_type\": \"ROUTING_TYPE_VNET\",\n"
+    " \"action_type\": \"ROUTING_TYPE_UNSPECIFIED\",\n"
+    " \"routing_type\": \"ROUTING_TYPE_VNET\",\n"
     " \"vnet\": \"Vnet2\"\n"
     "}\n";
 
