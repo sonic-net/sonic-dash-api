@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package dash.route_group;
+
+message RouteGroup {
+    optional string guid = 1;
+    string version = 2;
+}
+
+message RouteGroupKey {
+    string group_id = 1;
+}
