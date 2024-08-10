@@ -14,9 +14,9 @@ message VnetDirect {
 
 message ServiceTunnel {
     // overlay ipv6 src ip if routing_type is {servicetunnel}
-    types.IpAddress overlay_sip = 1 [deprecated = true]; // replaced by overlay_sip_prefix
+    types.IpAddress overlay_sip = 1; // replaced by overlay_sip_prefix
     // overlay ipv6 dst ip if routing_type is {servicetunnel}
-    types.IpAddress overlay_dip = 2 [deprecated = true]; // replaced by overlay_dip_prefix
+    types.IpAddress overlay_dip = 2; // replaced by overlay_dip_prefix
     // underlay ipv4 src ip if routing_type is {servicetunnel}, this is the ST GW VIP (for ST traffic) or custom VIP
     types.IpAddress underlay_sip = 3;
     // underlay ipv4 dst ip to override if routing_type is {servicetunnel}, use dst ip from packet if not specified
@@ -26,7 +26,7 @@ message ServiceTunnel {
 }
 
 message Route {
-    route_type.RoutingType action_type = 1 [deprecated = true]; // renamed as routing_type
+    route_type.RoutingType action_type = 1; // renamed as routing_type
     oneof Action {
         // destination vnet name if routing_type is vnet,, a vnet other than eni's vnet means vnet peering
         string vnet = 2;
@@ -38,9 +38,9 @@ message Route {
         route.ServiceTunnel service_tunnel = 5;
     }
     // Metering policy lookup enable (optional), default = false
-    optional bool metering_policy_en = 6 [deprecated = true];
+    optional bool metering_policy_en = 6;
     // Metering class-id, used if metering policy lookup is not enabled
-    optional uint64 metering_class = 7 [deprecated = true];
+    optional uint64 metering_class = 7;
     optional uint32 metering_class_or = 8;
     optional uint32 metering_class_and = 9;
     route_type.RoutingType routing_type = 10;
@@ -48,7 +48,7 @@ message Route {
 
 // ENI route table with CA prefix for packet Outbound
 message RouteKey {
-    string eni = 1 [deprecated = true]; // renamed as group_id 
+    string eni = 1; // renamed as group_id 
     // IP prefix string with prefix length. E.G. 10.1.0.0/16
     string prefix = 2;
     string group_id = 3;

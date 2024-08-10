@@ -6,7 +6,7 @@ import "route_type.proto";
 
 message RouteRule {
     // reference to routing type, action can be decap or drop
-    route_type.RoutingType action_type = 1 [deprecated = true]; // renamed as routing_type
+    route_type.RoutingType action_type = 1; // renamed as routing_type
     // priority of the rule, lower the value, higher the priority
     uint32 priority = 2;
     // Optional
@@ -20,7 +20,7 @@ message RouteRule {
     optional bool pa_validation = 5;
     // Optional
     // Metering class-id
-    optional uint64 metering_class = 6 [deprecated = true]; // replaced by metering_class_or and metering_class_and
+    optional uint64 metering_class = 6; // replaced by metering_class_or and metering_class_and
     // Optional
     // optional region_id which the vni/prefix belongs to as a string for any vendor optimizations
     optional string region = 7;
