@@ -27,7 +27,7 @@ message ServiceTunnel {
 
 message Route {
     route_type.RoutingType action_type = 1 [deprecated = true]; // renamed as routing_type
-    oneof Action {
+    oneof RoutingTypeData {
         // destination vnet name if routing_type is vnet,, a vnet other than eni's vnet means vnet peering
         string vnet = 2;
         // destination vnet name if routing_type is vnet_direct,, a vnet other than eni's vnet means vnet peering
@@ -36,6 +36,8 @@ message Route {
         string appliance = 4;
         // service tunnel if routing_type is {service_tunnel}
         route.ServiceTunnel service_tunnel = 5;
+        // if routing_type is {privatelink}, overrides pl_underlay_sip from ENI table if given
+        types.IpAddress underlay_sip = 11;
     }
     // Metering policy lookup enable (optional), default = false
     optional bool metering_policy_en = 6 [deprecated = true];
