@@ -23,7 +23,7 @@ message Eni {
     string vnet = 6;
     // Optional
     // Private Link encoding for IPv6 SIP transpositions
-    optional types.IpPrefix pl_sip_encoding = 7 [deprecated = true];
+    optional types.IpPrefix pl_sip_encoding = 7;
     // Optional
     // Underlay SIP (ST GW VIP) to be used for all private link transformation for this ENI
     optional types.IpAddress pl_underlay_sip = 8;

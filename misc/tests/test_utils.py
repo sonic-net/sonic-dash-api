@@ -22,7 +22,8 @@ def test_dash_api_utils():
  "sip": {
   "ipv4": 16777482
  },
- "vm_vni": 4321
+ "vm_vni": 4321,
+ "local_region_id": 100
 }
     '''
     result = runner.invoke(utils_cli.utils_cli,
