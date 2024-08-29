@@ -43,7 +43,7 @@ message Route {
     optional uint64 metering_class = 7 [deprecated = true];
     optional uint32 metering_class_or = 8;
     optional uint32 metering_class_and = 9;
-    route_type.RoutingType routing_type = 10;
+    route_type.RoutingType routing_type = 10; // Must be one of {vnet, vnet_direct, direct, servicetunnel, drop}
     // If VnetMapping for an IP in this prefix has routing_type {privatelink}, overrides pl_underlay_sip from ENI table if given
     types.IpAddress underlay_sip = 11;
 }
