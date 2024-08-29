@@ -36,8 +36,6 @@ message Route {
         string appliance = 4;
         // service tunnel if routing_type is {service_tunnel}
         route.ServiceTunnel service_tunnel = 5;
-        // if routing_type is {privatelink}, overrides pl_underlay_sip from ENI table if given
-        types.IpAddress underlay_sip = 11;
     }
     // Metering policy lookup enable (optional), default = false
     optional bool metering_policy_en = 6 [deprecated = true];
@@ -46,6 +44,8 @@ message Route {
     optional uint32 metering_class_or = 8;
     optional uint32 metering_class_and = 9;
     route_type.RoutingType routing_type = 10;
+    // If VnetMapping for an IP in this prefix has routing_type {privatelink}, overrides pl_underlay_sip from ENI table if given
+    types.IpAddress underlay_sip = 11;
 }
 
 // ENI route table with CA prefix for packet Outbound
