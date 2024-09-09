@@ -120,7 +120,8 @@ TEST(Utils, CInterface)
     " \"sip\": {\n"
     "  \"ipv4\": 16777482\n"
     " },\n"
-    " \"vm_vni\": 4321\n"
+    " \"vm_vni\": 4321,\n"
+    " \"local_region_id\": 100\n"
     "}\n";
 
     binary_size = 0;

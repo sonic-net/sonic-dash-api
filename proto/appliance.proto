@@ -9,6 +9,8 @@ message Appliance {
     types.IpAddress sip = 1;
     // VM VNI that is used for setting direction. Also used for inbound encap to VM
     uint32 vm_vni = 2;
+    // region where this appliance is located
+    uint32 local_region_id = 3;
 }
 
 message ApplianceKey {
