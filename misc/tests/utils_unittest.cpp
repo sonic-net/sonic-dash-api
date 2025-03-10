@@ -41,6 +41,8 @@ TEST(Utils, ValidUrlConversion)
         {"sonic/dash.tunnel.Tunnel", "DASH_TUNNEL_TABLE"},
         {"sonic/dash.vnet_mapping.VnetMapping", "DASH_VNET_MAPPING_TABLE"},
         {"sonic/dash.vnet.Vnet", "DASH_VNET_TABLE"},
+        {"sonic/dash.ha_scope.HaScope", "DASH_HA_SCOPE_TABLE"},
+        {"sonic/dash.ha_set.HaSet", "DASH_HA_SET_TABLE"},
     };
     set<string> ignore_files = {
         "types.proto"
