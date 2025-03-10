@@ -52,5 +52,3 @@ message HaSet {
     // HA_SET_ID as key
     string ha_set_id = 1;
 }
-
-
