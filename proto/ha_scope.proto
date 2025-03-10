@@ -27,5 +27,5 @@ message HaScope {
 
 message HaScopeKey {
     // HA scope ID. It can be the HA set id (scope = dpu) or ENI id (scope = eni).
-    string ha_scope_id = 1;
+    string ha_scope = 1;
 }
