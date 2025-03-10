@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package dash.ha_set;
+
+import "types.proto";
+
+enum Owner{
+    OWNER_UNSPECIFIED = 0;
+    OWNER_CONTROLLER = 1;
+    OWNER_SWITCH = 2;
+}
+
+enum Scope{
+    SCOPE_UNSPECIFIED = 0;
+    SCOPE_DPU = 1;
+    SCOPE_ENI = 2;
+}
+
+message HaSet {
+    string ha_set_id = 1;
+    // Config version
+    string version = 2;
+    // IPv4 data path VIP
+    types.IpAddress vip_v4 = 3;
+    // IPv6 data path VIP
+    types.IpAddress vip_v6 = 4;
+    // Owner of HA machine
+    ha_set.Owner owner = 5;
+    // Scope of ha set
+    ha_set.Scope scope = 6;
+    // The IP address of local NPU. It can be IPv4 or IPv6. Used for setting up the BFD session.
+    types.IpAddress local_npu_ip = 7;
+    // The IP address of local DPU. It can be IPv4 or IPv6.
+    types.IpAddress local_ip = 8;
+    // The IP address of peer DPU. It can be IPv4 or IPv6.
+    type.IpAddress peer_ip = 9;
+    // The port of control plane data channel, used for bulk sync.
+    uint32 cp_data_channel_port = 10;
+    // The destination port used when tunneling packets via DPU-to-DPU data plane channel.
+    uint32 dp_channel_dst_port = 11;
+    // The min source port used when tunneling packets via DPU-to-DPU data plane channel.
+    uint32 dp_channel_src_port_min = 12;
+    // The max source port used when tunneling packets via DPU-to-DPU data plane channel.
+    uint32 dp_channel_src_port_max = 13;
+    // The interval of sending each DPU-to-DPU data path probe.
+    uint32 dp_channel_probe_interval_ms = 14;
+    // The number of probe failure needed to consider data plane channel is dead. 
+    uint32 dp_channel_probe_fail_threshold = 15;
+}
+
+message HaSet {
+    // HA_SET_ID as key
+    string ha_set_id = 1;
+}
+
+
