@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package dash.ha_scope;
+
+enum Role{
+    HA_SCOPE_ROLE_UNSPECIFIED = 0;
+    HA_SCOPE_ROLE_DEAD = 1;
+    HA_SCOPE_ROLE_ACTIVE = 2;
+    HA_SCOPE_ROLE_STANDBY = 3;
+    HA_SCOPE_ROLE_STANDALONE = 4;
+    HA_SCOPE_ROLE_SWITCHING_TO_ACTIVE = 5;
+}
+
+message HaScope {
+    // HA scope ID. It can be the HA set id (scope = dpu) or ENI id (scope = eni)
+    string ha_scope_id = 1;
+    // Config version.
+    string version = 2;
+    // If true, disable this vDPU. It can only be false or true.
+    bool disabled = 3;
+    // The HA role for this scope.
+    ha_scope.Role ha_role = 4;
+    // If true, flow reconcile will be initiated. (Message Only. Not saved in DB.)
+    bool flow_reconcile_requested = 5;
+    // If true, HA role will be activated. (Message Only. Not saved in DB.)
+    bool activate_role_requested = 6;
+}
+
+message HaScopeKey {
+    // HA scope ID. It can be the HA set id (scope = dpu) or ENI id (scope = eni)
+    string ha_scope_id = 1;
+}
