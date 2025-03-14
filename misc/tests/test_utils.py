@@ -23,7 +23,8 @@ def test_dash_api_utils():
   "ipv4": 16777482
  },
  "vm_vni": 4321,
- "local_region_id": 100
+ "local_region_id": 100,
+ "outbound_direction_lookup": "dst_mac"
 }
     '''
     result = runner.invoke(utils_cli.utils_cli,
