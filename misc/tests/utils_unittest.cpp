@@ -101,18 +101,18 @@ TEST(Utils, CInterface)
 
     const std::string json_str1 = 
     "{\n"
-    " \"action_type\": \"ROUTING_TYPE_UNSPECIFIED\",\n"
-    " \"routing_type\": \"ROUTING_TYPE_VNET\",\n"
+    " \"action_type\": \"ACTION_TYPE_DECAP\",\n"
+    " \"priority\": 2,\n"
     " \"vnet\": \"Vnet2\"\n"
     "}\n";
 
     char binary[256] = {0};
     size_t binary_size = 0;
-    EXPECT_NO_THROW(binary_size = JsonStringToPbBinary("DASH_ROUTE_TABLE", json_str1.c_str(), binary, sizeof(binary)));
+    EXPECT_NO_THROW(binary_size = JsonStringToPbBinary("DASH_ROUTE_RULE_TABLE", json_str1.c_str(), binary, sizeof(binary)));
     EXPECT_GT(binary_size, 0);
 
     char json[256] = {0};
-    EXPECT_NO_THROW(PbBinaryToJsonString("DASH_ROUTE_TABLE", binary, binary_size, json, sizeof(json)));
+    EXPECT_NO_THROW(PbBinaryToJsonString("DASH_ROUTE_RULE_TABLE", binary, binary_size, json, sizeof(json)));
     EXPECT_EQ(string(json), json_str1);
 
     const std::string json_str2 =
