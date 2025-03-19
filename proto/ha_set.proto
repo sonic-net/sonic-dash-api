@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package dash.dpu_ha_set;
+package dash.ha_set;
 
 import "types.proto";
 
@@ -23,9 +23,9 @@ message HaSet {
     // IPv6 data path VIP
     types.IpAddress vip_v6 = 4;
     // Owner of HA machine
-    dpu_ha_set.Owner owner = 5;
+    ha_set.Owner owner = 5;
     // Scope of ha set
-    dpu_ha_set.Scope scope = 6;
+    ha_set.Scope scope = 6;
     // The IP address of local NPU. It can be IPv4 or IPv6. Used for setting up the BFD session.
     types.IpAddress local_npu_ip = 7;
     // The IP address of local DPU. It can be IPv4 or IPv6.
