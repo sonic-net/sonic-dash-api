@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package dash.ha_scope;
+package dash.dpu_ha_scope;
 
 enum Role{
     HA_SCOPE_ROLE_DEAD = 0;
@@ -18,7 +18,7 @@ message HaScope {
     // If true, disable this vDPU. It can only be false or true.
     bool disabled = 3;
     // The HA role for this scope.
-    ha_scope.Role ha_role = 4;
+    dpu_ha_scope.Role ha_role = 4;
     // If true, flow reconcile will be initiated. (Message Only. Not saved in DB.)
     bool flow_reconcile_requested = 5;
     // If true, HA role will be activated. (Message Only. Not saved in DB.)
