@@ -1,0 +1,23 @@
+syntax "proto3";
+
+package dash.npu_ha_scope;
+
+enum State {
+    DESIRED_HA_STATE_NONE = 0;
+    DESIRED_HA_STATE_DEAD = 1;
+    DESIRED_HA_STATE_ACTIVE = 2;
+    DESIRED_HA_STATE_STANDALONE = 3;
+}
+
+message HaScopeConfig {
+    string ha_scope_id = 1;
+    string version = 2;
+    bool disabled = 3;
+    npu_ha_scope.State desired_ha_state = 4;
+    // Approved pending HA operation id list, connected by ","
+    string approved_pending_operation_ids = 5;
+}
+
+message HaScopeConfigKey {
+    string ha_scope = 1;
+}
