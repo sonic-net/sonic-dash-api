@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package dash.ha_set_state;
+
+enum DpChannelState {
+    HA_SET_EVENT_DP_CHANNEL_UP = 0;
+    HA_SET_EVENT_DP_CHANNEL_DOWN = 1;
+}
+
+message HaSetState {
+    string ha_set_id = 1;
+    string last_updated_time = 2;
+    ha_set_state.DpChannelState dp_channel_state = 3; 
+}
+
+message HaSetStateKey {
+    string ha_set = 1;
+}
