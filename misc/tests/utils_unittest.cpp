@@ -82,8 +82,8 @@ TEST(Utils, ValidUrlConversion)
 TEST(Utils, InvalidUrlConversion)
 {
     EXPECT_THROW(TableNameToTypeUrl(""), runtime_error);
-    EXPECT_THROW(TableNameToTypeUrl("DASH_TABLE"), runtime_error);
-    EXPECT_THROW(TableNameToTypeUrl("DASHABCROUTE"), runtime_error);
+    EXPECT_THROW(TableNameToTypeUrl("DASH_ROUTE"), runtime_error);
+    EXPECT_THROW(TableNameToTypeUrl("DASH_ABC_ROUTE"), runtime_error);
 }
 
 TEST(Utils, ValidJsonConversion)

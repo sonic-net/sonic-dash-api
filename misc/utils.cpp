@@ -27,13 +27,10 @@ static unique_ptr<util::TypeResolver> resolver(
 // =>
 // Type url: sonic/dash.route_rule.RouteRule
 string TableNameToTypeUrl(const string &table_name) {
-    static regex suffix("_TABLE$"); 
-    string str = regex_replace(table_name, suffix, "");
-
-    static regex rgx("^([^_]*)_(.+)$");
+    static regex rgx("^([^_]*)_(.+)_TABLE$");
     smatch matches;
 
-    if (!regex_match(str, matches, rgx)) {
+    if (!regex_match(table_name, matches, rgx)) {
         throw runtime_error("Invalid table name: " + table_name);
     }
 
