@@ -12,7 +12,7 @@ message Appliance {
     // region where this appliance is located
     uint32 local_region_id = 3;
     // outbound direction lookup
-    string outbound_direction_lookup = 4;
+    optional string outbound_direction_lookup = 4;
 }
 
 message ApplianceKey {
