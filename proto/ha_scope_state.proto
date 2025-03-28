@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package dash.ha_scope_state;
+
+enum HaState{
+    HA_STATE_DEAD = 0;
+    HA_STATE_CONNECTING = 1;
+    HA_STATE_CONNECTED = 2;
+    HA_STATE_INITIALIZING_TO_ACTIVE = 3;
+    HA_STATE_INITIALIZING_TO_STANDBY = 4;
+    HA_STATE_PENDING_STANDALONE_ACTIVATION = 5;
+    HA_STATE_PENDING_ACTIVE_ACTIVATION = 6;
+    HA_STATE_PENDING_STANDBY_ACTIVATION = 7;
+    HA_STATE_STANDALONE = 8;
+    HA_STATE_ACTIVE = 9;
+    HA_STATE_STANDBY = 10;
+    HA_STATE_DESTROYING = 11;
+    HA_STATE_SWITCHING_TO_STANDALONE = 12;
+}
+
+message HaScopeState {
+    string ha_scope_id = 1;
+    string last_updated_time = 2;
+    ha_scope_state.HaState ha_state_in_asic = 3;
+    string ha_role_start_time = 4;
+    string ha_term = 5;
+    bool activate_role_pending = 6;
+    bool flow_reconcile_pending = 7;
+    bool brainsplit_recover_pending = 8;
+}
+
+message HaScopeStateKey {
+    string ha_scope = 1;
+}
