@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package dash.ha_set_state;
+
+import "types.proto";
+
+message HaSetState {
+    string ha_set_id = 1;
+    string last_updated_time = 2;
+    types.HaSetDpChannelState dp_channel_state = 3; 
+}
+
+message HaSetStateKey {
+    string ha_set = 1;
+}

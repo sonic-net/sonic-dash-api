@@ -41,6 +41,12 @@ TEST(Utils, ValidUrlConversion)
         {"sonic/dash.tunnel.Tunnel", "DASH_TUNNEL_TABLE"},
         {"sonic/dash.vnet_mapping.VnetMapping", "DASH_VNET_MAPPING_TABLE"},
         {"sonic/dash.vnet.Vnet", "DASH_VNET_TABLE"},
+        {"sonic/dash.ha_scope.HaScope", "DASH_HA_SCOPE_TABLE"},
+        {"sonic/dash.ha_set.HaSet", "DASH_HA_SET_TABLE"},
+        {"sonic/dash.ha_set_config.HaSetConfig", "DASH_HA_SET_CONFIG_TABLE"},
+        {"sonic/dash.ha_scope_config.HaScopeConfig", "DASH_HA_SCOPE_CONFIG_TABLE"},
+        {"sonic/dash.ha_set_state.HaSetState", "DASH_HA_SET_STATE_TABLE"},
+        {"sonic/dash.ha_scope_state.HaScopeState", "DASH_HA_SCOPE_STATE_TABLE"},
     };
     set<string> ignore_files = {
         "types.proto"

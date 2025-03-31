@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package dash.ha_scope_state;
+
+import "types.proto";
+
+message HaScopeState {
+    string ha_scope_id = 1;
+    string last_updated_time = 2;
+    types.HaState ha_state_in_asic = 3;
+    string ha_role_start_time = 4;
+    string ha_term = 5;
+    bool activate_role_pending = 6;
+    bool flow_reconcile_pending = 7;
+    bool brainsplit_recover_pending = 8;
+}
+
+message HaScopeStateKey {
+    string ha_scope = 1;
+}
