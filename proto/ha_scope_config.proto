@@ -2,18 +2,18 @@ syntax = "proto3";
 
 package dash.ha_scope_config;
 
-enum State {
-    DESIRED_HA_STATE_NONE = 0;
-    DESIRED_HA_STATE_DEAD = 1;
-    DESIRED_HA_STATE_ACTIVE = 2;
-    DESIRED_HA_STATE_STANDALONE = 3;
+enum DesiredHaState {
+    HA_STATE_NONE = 0;
+    HA_STATE_DEAD = 1;
+    HA_STATE_ACTIVE = 2;
+    HA_STATE_STANDALONE = 3;
 }
 
 message HaScopeConfig {
     string ha_scope_id = 1;
     string version = 2;
     bool disabled = 3;
-    ha_scope_config.State desired_ha_state = 4;
+    ha_scope_config.DesiredHaState desired_ha_state = 4;
     // Approved pending HA operation id list, connected by ","
     string approved_pending_operation_ids = 5;
 }

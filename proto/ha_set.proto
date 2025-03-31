@@ -4,16 +4,6 @@ package dash.ha_set;
 
 import "types.proto";
 
-enum Owner{
-    OWNER_CONTROLLER = 0;
-    OWNER_SWITCH = 1;
-}
-
-enum Scope{
-    SCOPE_DPU = 0;
-    SCOPE_ENI = 1;
-}
-
 message HaSet {
     string ha_set_id = 1;
     // Config version
@@ -23,9 +13,9 @@ message HaSet {
     // IPv6 data path VIP
     types.IpAddress vip_v6 = 4;
     // Owner of HA machine
-    ha_set.Owner owner = 5;
+    types.HaOwner owner = 5;
     // Scope of ha set
-    ha_set.Scope scope = 6;
+    types.HaScope scope = 6;
     // The IP address of local NPU. It can be IPv4 or IPv6. Used for setting up the BFD session.
     types.IpAddress local_npu_ip = 7;
     // The IP address of local DPU. It can be IPv4 or IPv6.

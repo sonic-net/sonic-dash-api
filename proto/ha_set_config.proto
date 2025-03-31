@@ -4,25 +4,13 @@ package dash.ha_set_config;
 
 import "types.proto";
 
-enum Owner {
-    OWNER_UNSPECIFIED = 0;
-    OWNER_DPU = 1;
-    OWNER_SWITCH = 2;
-}
-
-enum Scope {
-    SCOPE_UNSPECIFIED = 0;
-    SCOPE_DPU = 1;
-    SCOPE_ENI = 2;
-}
-
 message HaSetConfig {
     string ha_set_id = 1 ;
     string version = 2;
     types.IpAddress vip_v4 = 3;
     types.IpAddress vip_v6 = 4;
-    ha_set_config.Owner owner = 5;
-    ha_set_config.Scope scope = 6;
+    types.HaOwner owner = 5;
+    types.HaScope scope = 6;
     // IDs of vDPUs, value format should be /{/{vdpu_id1/},/{vdpu_id2/},.../}
     string vdpu_ids = 7;
     // Pinned probe states of vDPUs, connected by ",". Each state can be none, up or down.

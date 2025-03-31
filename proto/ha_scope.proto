@@ -2,13 +2,7 @@ syntax = "proto3";
 
 package dash.ha_scope;
 
-enum Role{
-    HA_SCOPE_ROLE_DEAD = 0;
-    HA_SCOPE_ROLE_ACTIVE = 1;
-    HA_SCOPE_ROLE_STANDBY = 2;
-    HA_SCOPE_ROLE_STANDALONE = 3;
-    HA_SCOPE_ROLE_SWITCHING_TO_ACTIVE = 4;
-}
+import "types.proto";
 
 message HaScope {
     // HA scope ID. It can be the HA set id (scope = dpu) or ENI id (scope = eni)
@@ -18,7 +12,7 @@ message HaScope {
     // If true, disable this vDPU. It can only be false or true.
     bool disabled = 3;
     // The HA role for this scope.
-    ha_scope.Role ha_role = 4;
+    types.HaRole ha_role = 4;
     // If true, flow reconcile will be initiated. (Message Only. Not saved in DB.)
     bool flow_reconcile_requested = 5;
     // If true, HA role will be activated. (Message Only. Not saved in DB.)
