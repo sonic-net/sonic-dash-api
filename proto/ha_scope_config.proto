@@ -10,14 +10,13 @@ enum DesiredHaState {
 }
 
 message HaScopeConfig {
-    string ha_scope_id = 1;
-    string version = 2;
-    bool disabled = 3;
-    ha_scope_config.DesiredHaState desired_ha_state = 4;
-    // Approved pending HA operation id list, connected by ","
-    string approved_pending_operation_ids = 5;
+    string version = 1;
+    bool disabled = 2;
+    ha_scope_config.DesiredHaState desired_ha_state = 3;
+    repeated string approved_pending_operation_ids = 4;
 }
 
 message HaScopeConfigKey {
-    string ha_scope = 1;
+    string ha_scope_id = 1;
+    string vdpu_id = 2;
 }

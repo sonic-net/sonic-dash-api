@@ -5,21 +5,19 @@ package dash.ha_scope;
 import "types.proto";
 
 message HaScope {
-    // HA scope ID. It can be the HA set id (scope = dpu) or ENI id (scope = eni)
-    string ha_scope_id = 1;
     // Config version.
-    string version = 2;
+    string version = 1;
     // If true, disable this vDPU. It can only be false or true.
-    bool disabled = 3;
+    bool disabled = 2;
     // The HA role for this scope.
-    types.HaRole ha_role = 4;
+    types.HaRole ha_role = 3;
     // If true, flow reconcile will be initiated. (Message Only. Not saved in DB.)
-    bool flow_reconcile_requested = 5;
+    bool flow_reconcile_requested = 4;
     // If true, HA role will be activated. (Message Only. Not saved in DB.)
     bool activate_role_requested = 6;
 }
 
 message HaScopeKey {
     // HA scope ID. It can be the HA set id (scope = dpu) or ENI id (scope = eni).
-    string ha_scope = 1;
+    string ha_scope_id = 1;
 }

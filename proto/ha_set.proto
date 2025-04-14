@@ -5,38 +5,37 @@ package dash.ha_set;
 import "types.proto";
 
 message HaSet {
-    string ha_set_id = 1;
     // Config version
-    string version = 2;
+    string version = 1;
     // IPv4 data path VIP
-    types.IpAddress vip_v4 = 3;
+    types.IpAddress vip_v4 = 2;
     // IPv6 data path VIP
-    types.IpAddress vip_v6 = 4;
+    types.IpAddress vip_v6 = 3;
     // Owner of HA machine
-    types.HaOwner owner = 5;
+    types.HaOwner owner = 4;
     // Scope of ha set
-    types.HaScope scope = 6;
+    types.HaScope scope = 5;
     // The IP address of local NPU. It can be IPv4 or IPv6. Used for setting up the BFD session.
-    types.IpAddress local_npu_ip = 7;
+    types.IpAddress local_npu_ip = 6;
     // The IP address of local DPU. It can be IPv4 or IPv6.
-    types.IpAddress local_ip = 8;
+    types.IpAddress local_ip = 7;
     // The IP address of peer DPU. It can be IPv4 or IPv6.
-    types.IpAddress peer_ip = 9;
+    types.IpAddress peer_ip = 8;
     // The port of control plane data channel, used for bulk sync.
-    uint32 cp_data_channel_port = 10;
+    uint32 cp_data_channel_port = 9;
     // The destination port used when tunneling packets via DPU-to-DPU data plane channel.
-    uint32 dp_channel_dst_port = 11;
+    uint32 dp_channel_dst_port = 10;
     // The min source port used when tunneling packets via DPU-to-DPU data plane channel.
-    uint32 dp_channel_src_port_min = 12;
+    uint32 dp_channel_src_port_min = 11;
     // The max source port used when tunneling packets via DPU-to-DPU data plane channel.
-    uint32 dp_channel_src_port_max = 13;
+    uint32 dp_channel_src_port_max = 12;
     // The interval of sending each DPU-to-DPU data path probe.
-    uint32 dp_channel_probe_interval_ms = 14;
+    uint32 dp_channel_probe_interval_ms = 13;
     // The number of probe failure needed to consider data plane channel is dead. 
-    uint32 dp_channel_probe_fail_threshold = 15;
+    uint32 dp_channel_probe_fail_threshold = 14;
 }
 
 message HaSetKey {
     // HA_SET_ID as key
-    string ha_set = 1;
+    string ha_set_id = 1;
 }
