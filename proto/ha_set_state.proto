@@ -5,7 +5,7 @@ package dash.ha_set_state;
 import "types.proto";
 
 message HaSetState {
-    string last_updated_time = 1;
+    Timestamp last_updated_time = 1;
     types.HaSetDpChannelState dp_channel_state = 2; 
 }
 
