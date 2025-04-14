@@ -14,7 +14,7 @@ message HaScope {
     // If true, flow reconcile will be initiated. (Message Only. Not saved in DB.)
     bool flow_reconcile_requested = 4;
     // If true, HA role will be activated. (Message Only. Not saved in DB.)
-    bool activate_role_requested = 6;
+    bool activate_role_requested = 5;
 }
 
 message HaScopeKey {
