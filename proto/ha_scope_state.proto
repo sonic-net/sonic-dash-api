@@ -3,11 +3,12 @@ syntax = "proto3";
 package dash.ha_scope_state;
 
 import "types.proto";
+import "google/protobuf/timestamp.proto";
 
 message HaScopeState {
-    Timestamp last_updated_time = 1;
+    google.protobuf.Timestamp last_updated_time = 1;
     types.HaState ha_state_in_asic = 2;
-    Timestamp ha_role_start_time = 3;
+    google.protobuf.Timestamp ha_role_start_time = 3;
     uint32 ha_term = 4;
     bool activate_role_pending = 5;
     bool flow_reconcile_pending = 6;

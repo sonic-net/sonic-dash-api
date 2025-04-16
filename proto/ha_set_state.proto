@@ -3,9 +3,10 @@ syntax = "proto3";
 package dash.ha_set_state;
 
 import "types.proto";
+import "google/protobuf/timestamp.proto";
 
 message HaSetState {
-    Timestamp last_updated_time = 1;
+    google.protobuf.Timestamp last_updated_time = 1;
     types.HaSetDpChannelState dp_channel_state = 2; 
 }
 
