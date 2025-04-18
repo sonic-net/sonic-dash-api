@@ -23,7 +23,7 @@ INSTALLED_PYTHON_DIR := $(DESTDIR)/usr/lib/python3/dist-packages/$(PKGNAME)
 PYINCLUDE := $(shell python3 -c "import sys; import sysconfig; sys.stdout.write(sysconfig.get_config_var('INCLUDEPY'))")
 PYLIBRARY := $(shell python3 -c "import sys; import sysconfig; sys.stdout.write(sysconfig.get_config_var('BLDLIBRARY'))")
 
-all: compile_cpp_proto dashapi.so compile_py_proto swig
+all: compile_cpp_proto dashapi.so compile_py_proto swig test
 
 compile_cpp_proto:
 	$(MKDIR) -p $(BUILD_DIR)
