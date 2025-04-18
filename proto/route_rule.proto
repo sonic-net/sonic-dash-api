@@ -36,5 +36,8 @@ message RouteRuleKey {
     string eni = 1;
     uint32 vni = 2;
     // IP prefix string with prefix length. E.G. 10.1.0.0/16
-    string prefix = 3;
+    oneof source {
+        string prefix = 3;
+        string tag = 4;
+    }
 };

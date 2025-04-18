@@ -24,6 +24,7 @@ def test_dash_api_utils():
  },
  "vm_vni": 4321,
  "local_region_id": 100,
+ "trusted_vnis": [],
  "outbound_direction_lookup": "dst_mac"
 }
     '''
