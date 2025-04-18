@@ -4,6 +4,12 @@ package dash.appliance;
 
 import "types.proto";
 
+enum OutboundDirectionLookup {
+    OUTBOUND_DIRECTION_LOOKUP_UNSPECIFIED = 0;
+    OUTBOUND_DIRECTION_LOOKUP_DST_MAC= 1;
+    OUTBOUND_DIRECTION_LOOKUP_SRC_MAC= 2;
+}
+
 message Appliance {
     // source ip address, to be used in encap
     types.IpAddress sip = 1;
@@ -11,8 +17,9 @@ message Appliance {
     uint32 vm_vni = 2;
     // region where this appliance is located
     uint32 local_region_id = 3;
-    // outbound direction lookup
+    // outbound direction lookup. Must be either "dst_mac" or "src_mac"
     optional string outbound_direction_lookup = 4;
+    repeated uint32 trusted_vnis = 5;
 }
 
 message ApplianceKey {

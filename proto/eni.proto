@@ -10,6 +10,12 @@ enum State{
     STATE_ENABLED = 2;
 }
 
+enum EniMode {
+    ENI_MODE_UNSPECIFIED = 0;
+    ENI_MODE_VM = 1;
+    ENI_MODE_FNIC = 2;
+}
+
 message Eni {
     string eni_id = 1;
     bytes mac_address = 2;
@@ -34,6 +40,8 @@ message Eni {
     // IPv6 meter policy ID
     optional string v6_meter_policy_id = 10;
     optional bool disable_fast_path_icmp_flow_redirection = 11;
+    optional EniMode eni_mode = 12;
+    repeated uint32 trusted_vnis = 13;
 }
 
 message EniKey {
