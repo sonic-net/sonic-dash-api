@@ -5,9 +5,9 @@ package dash.appliance;
 import "types.proto";
 
 enum OutboundDirectionLookup {
-    OUTBOUND_DIRECTION_LOOKUP_UNSPECIFIED = 0;
-    OUTBOUND_DIRECTION_LOOKUP_DST_MAC= 1;
-    OUTBOUND_DIRECTION_LOOKUP_SRC_MAC= 2;
+    LOOKUP_UNSPECIFIED = 0;
+    LOOKUP_DST_MAC= 1;
+    LOOKUP_SRC_MAC= 2;
 }
 
 message Appliance {

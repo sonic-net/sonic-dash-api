@@ -11,9 +11,9 @@ enum State{
 }
 
 enum EniMode {
-    ENI_MODE_UNSPECIFIED = 0;
-    ENI_MODE_VM = 1;
-    ENI_MODE_FNIC = 2;
+    MODE_UNSPECIFIED = 0;
+    MODE_VM = 1;
+    MODE_FNIC = 2;
 }
 
 message Eni {
