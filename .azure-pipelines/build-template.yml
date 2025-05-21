@@ -21,7 +21,7 @@ parameters:
 
 - name: debian_version
   type: string
-  default: bullseye
+  default: bookworm
 
 - name: artifact_name
   type: string
@@ -33,7 +33,7 @@ jobs:
     ${{ if ne(parameters.pool, 'default') }}:
       name: ${{ parameters.pool }}
     ${{ else }}:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-24.04'
 
   container:
     image: sonicdev-microsoft.azurecr.io:443/${{ parameters.sonic_slave }}:latest
@@ -43,26 +43,6 @@ jobs:
       sudo apt-get update
       sudo apt-get install -y make libboost-all-dev libgtest-dev build-essential swig4.0
     displayName: "Install dependencies"
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      source: specific
-      project: build
-      pipeline: Azure.sonic-buildimage.common_libs
-      runVersion: 'latestFromBranch'
-      runBranch: 'refs/heads/master'
-      path: $(Build.ArtifactStagingDirectory)/download
-      ${{ if eq(parameters.arch, 'amd64') }}:
-        artifact: common-lib
-      ${{ else }}:
-        artifact: common-lib.${{ parameters.arch }}
-      patterns: |
-        target/debs/${{ parameters.debian_version }}/libprotobuf*.deb
-        target/debs/${{ parameters.debian_version }}/libprotoc*.deb
-        target/debs/${{ parameters.debian_version }}/protobuf-compiler*.deb
-  - script: |
-      sudo dpkg -i $( find download -type f -name '*.deb' )
-    workingDirectory: $(Build.ArtifactStagingDirectory)
-    displayName: "Install protobuf"
   - script: |
       mkdir -p package
       dpkg-buildpackage -rfakeroot -us -uc -b -j$(nproc)
