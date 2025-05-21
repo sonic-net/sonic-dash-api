@@ -41,7 +41,7 @@ stages:
         set -e
         sudo apt-get update
         sudo apt-get install -y make debhelper pkg-config nlohmann-json3-dev \
-                         swig libgtest-dev cmake \
+                         swig libgtest-dev cmake build-essential protobuf-compiler libprotobuf-dev \
                          libpython3-dev libboost-all-dev uuid-dev libzmq3-dev
         sudo apt-get install -y python3-pip
         sudo pip3 install pytest
