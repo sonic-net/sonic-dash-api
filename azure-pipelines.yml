@@ -32,31 +32,6 @@ stages:
       artifact_name: sonic-dash-api
 
   - job:
-    displayName: "amd64/ubuntu-22.04"
-    pool:
-      vmImage: 'ubuntu-22.04'
-
-    steps:
-    - script: |
-        set -e
-        sudo apt-get update
-        sudo apt-get install -y make debhelper pkg-config nlohmann-json3-dev \
-                         swig4.0 libgtest-dev cmake \
-                         libpython3-dev libboost-all-dev uuid-dev libzmq3-dev
-        sudo apt-get install -y python3-pip
-        sudo pip3 install pytest
-        cd /usr/src/gtest && sudo cmake . && sudo make
-      displayName: "Install dependencies"
-    - script: |
-        set -e
-        dpkg-buildpackage -rfakeroot -us -uc -b -j$(nproc)
-        cp ../*.deb package/
-      displayName: "Build sonic-dash-api"
-    - publish: $(System.DefaultWorkingDirectory)/package
-      artifact: sonic-dash-api.amd64.ubuntu22_04
-      displayName: "Archive DASH debian packages"
-
-  - job:
     displayName: "amd64/ubuntu-24.04"
     pool:
       vmImage: 'ubuntu-24.04'
@@ -66,7 +41,7 @@ stages:
         set -e
         sudo apt-get update
         sudo apt-get install -y make debhelper pkg-config nlohmann-json3-dev \
-                         swig4.0 libgtest-dev cmake \
+                         swig libgtest-dev cmake \
                          libpython3-dev libboost-all-dev uuid-dev libzmq3-dev
         sudo apt-get install -y python3-pip
         sudo pip3 install pytest
