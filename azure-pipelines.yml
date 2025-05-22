@@ -50,6 +50,7 @@ stages:
     - script: |
         set -e
         dpkg-buildpackage -rfakeroot -us -uc -b -j$(nproc)
+        mkdir package
         cp ../*.deb package/
       displayName: "Build sonic-dash-api"
     - publish: $(System.DefaultWorkingDirectory)/package
