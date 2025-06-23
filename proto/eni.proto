@@ -41,7 +41,7 @@ message Eni {
     optional string v6_meter_policy_id = 10;
     optional bool disable_fast_path_icmp_flow_redirection = 11;
     optional EniMode eni_mode = 12;
-    repeated uint32 trusted_vnis = 13;
+    optional types.ValueOrRange trusted_vnis = 13;
 }
 
 message EniKey {
