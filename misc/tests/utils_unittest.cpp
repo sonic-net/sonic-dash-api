@@ -130,7 +130,9 @@ TEST(Utils, CInterface)
     " },\n"
     " \"vm_vni\": 4321,\n"
     " \"local_region_id\": 100,\n"
-    " \"trusted_vnis\": [],\n"
+    " \"trusted_vnis\": {\n"
+    "  \"value\": 100\n"
+    " },\n"
     " \"outbound_direction_lookup\": \"dst_mac\"\n"
     "}\n";
 
