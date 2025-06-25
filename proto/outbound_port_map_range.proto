@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dash.outbound_port_map_range;
+import "types.proto";
+
+enum PortMapRangeAction {
+    ACTION_UNSPECIFIED = 0;
+    ACTION_SKIP_MAPPING = 1;
+    ACTION_MAP_PRIVATE_LINK_SERVICE = 2;
+}
+
+// Key = DASH_OUTBOUND_PORT_MAP_RANGE:{map_id}:{start port}-{end port}
+message OutboundPortMapRange {
+    PortMapRangeAction action = 1;
+    types.IpAddress backend_ip = 2;
+    uint32 backend_port_base = 3;
+}

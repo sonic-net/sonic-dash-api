@@ -47,6 +47,8 @@ TEST(Utils, ValidUrlConversion)
         {"sonic/dash.ha_scope_config.HaScopeConfig", "DASH_HA_SCOPE_CONFIG_TABLE"},
         {"sonic/dash.ha_set_state.HaSetState", "DASH_HA_SET_STATE_TABLE"},
         {"sonic/dash.ha_scope_state.HaScopeState", "DASH_HA_SCOPE_STATE_TABLE"},
+        {"sonic/dash.outbound_port_map.OutboundPortMap", "DASH_OUTBOUND_PORT_MAP_TABLE"},
+        {"sonic/dash.outbound_port_map_range.OutboundPortMapRange", "DASH_OUTBOUND_PORT_MAP_RANGE_TABLE"}
     };
     set<string> ignore_files = {
         "types.proto"
