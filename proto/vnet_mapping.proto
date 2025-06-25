@@ -38,6 +38,8 @@ message VnetMapping {
     optional types.IpPrefix overlay_dip_prefix = 14;
     optional string tunnel = 15;
     route_type.RoutingType routing_type = 16;
+    // Specifies port map from DASH_OUTBOUND_PORT_MAP_TABLE to use for PL redirect map
+    optional string port_map = 17;
 }
 
 // CA-PA mapping table for Vnet
