@@ -7,11 +7,11 @@ import "types.proto";
 message Vnet {
     uint32 vni = 1;
     types.Guid guid = 2;
-    string version = 3;
     // Optional
-    repeated types.IpPrefix address_space = 4;
+    repeated types.IpPrefix address_space = 3;
     // Optional
-    repeated string peer_list = 5;
+    repeated string peer_list = 4;
+    string version = 5;
 }
 
 message VnetKey {
