@@ -48,7 +48,7 @@ enum HaRole{
 
 enum HaOwner{
   OWNER_UNSPECIFIED = 0;
-  OWNER_CONTROLLER = 1;
+  OWNER_DPU = 1;
   OWNER_SWITCH = 2;
 }
 
