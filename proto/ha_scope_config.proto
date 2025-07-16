@@ -5,10 +5,10 @@ package dash.ha_scope_config;
 import "types.proto";
 
 enum DesiredHaState {
-    HA_STATE_UNSPECIFIED = 0;
-    HA_STATE_DEAD = 1;
-    HA_STATE_ACTIVE = 2;
-    HA_STATE_STANDALONE = 3;
+    DESIRED_HA_STATE_UNSPECIFIED = 0;
+    DESIRED_HA_STATE_DEAD = 1;
+    DESIRED_HA_STATE_ACTIVE = 2;
+    DESIRED_HA_STATE_STANDALONE = 3;
 }
 
 message HaScopeConfig {
