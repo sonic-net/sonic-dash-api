@@ -5,8 +5,8 @@ package dash.route_rule;
 import "route_type.proto";
 
 message RouteRule {
-    // reference to routing type, action can be decap or drop
-    route_type.RoutingType action_type = 1 [deprecated = true]; // renamed as routing_type
+    // reference to action type, action can be decap or drop
+    route_type.ActionType action_type = 1; 
     // priority of the rule, lower the value, higher the priority
     uint32 priority = 2;
     // Optional
@@ -24,7 +24,7 @@ message RouteRule {
     // Optional
     // optional region_id which the vni/prefix belongs to as a string for any vendor optimizations
     optional string region = 7;
-    route_type.RoutingType routing_type = 8;
+    route_type.RoutingType routing_type = 8 [deprecated = true]; // incorrectly added
     // Optional
     // Metering class aggregate bits
     optional uint32 metering_class_or = 9;
