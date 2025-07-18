@@ -2,18 +2,22 @@ syntax = "proto3";
 
 package dash.ha_scope_config;
 
+import "types.proto";
+
 enum DesiredHaState {
-    HA_STATE_UNSPECIFIED = 0;
-    HA_STATE_DEAD = 1;
-    HA_STATE_ACTIVE = 2;
-    HA_STATE_STANDALONE = 3;
+    DESIRED_HA_STATE_UNSPECIFIED = 0;
+    DESIRED_HA_STATE_DEAD = 1;
+    DESIRED_HA_STATE_ACTIVE = 2;
+    DESIRED_HA_STATE_STANDALONE = 3;
 }
 
 message HaScopeConfig {
     string version = 1;
     bool disabled = 2;
-    ha_scope_config.DesiredHaState desired_ha_state = 3;
-    repeated string approved_pending_operation_ids = 4;
+    types.HaOwner owner = 3;
+    string ha_set_id = 4;
+    ha_scope_config.DesiredHaState desired_ha_state = 5;
+    repeated string approved_pending_operation_ids = 6;
 }
 
 message HaScopeConfigKey {

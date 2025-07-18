@@ -8,12 +8,11 @@ message HaSetConfig {
     string version = 1;
     types.IpAddress vip_v4 = 2;
     types.IpAddress vip_v6 = 3;
-    types.HaOwner owner = 4;
+    repeated string vdpu_ids = 4;
     types.HaScope scope = 5;
-    repeated string vdpu_ids = 6;
-    repeated string pinned_vdpu_bfd_probe_states = 7;
-    string preferred_vdpu_id = 8;
-    uint32 preferred_standalone_vdpu_index = 9;
+    repeated string pinned_vdpu_bfd_probe_states = 6;
+    string preferred_vdpu_id = 7;
+    uint32 preferred_standalone_vdpu_index = 8;
 }
 
 message HaSetConfigKey {
