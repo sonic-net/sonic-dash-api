@@ -11,6 +11,7 @@ message Vnet {
     repeated types.IpPrefix address_space = 3;
     // Optional
     repeated string peer_list = 4;
+    string version = 5;
 }
 
 message VnetKey {

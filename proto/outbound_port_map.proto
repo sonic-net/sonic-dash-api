@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package dash.outbound_port_map;
+
+import "types.proto";
+
+// Key = DASH_OUTBOUND_PORT_MAP:{map_id}
+message OutboundPortMap {
+    // No real info needed here since this is just a parent to one or more OUTBOUND_PORT_MAP_RANGE entries
+    optional string guid = 1;
+}

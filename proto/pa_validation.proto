@@ -5,7 +5,7 @@ package dash.pa_validation;
 import "types.proto";
 
 message PaValidation {
-    repeated types.IpAddress addresses = 1;
+    repeated types.IpPrefix prefixes = 1;
 }
 
 message PaValidationKey {

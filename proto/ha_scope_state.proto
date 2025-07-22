@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package dash.ha_scope_state;
+
+import "types.proto";
+import "google/protobuf/timestamp.proto";
+
+message HaScopeState {
+    google.protobuf.Timestamp last_updated_time = 1;
+    types.HaState ha_state = 2;
+    types.HaRole ha_role = 3;
+    google.protobuf.Timestamp ha_role_start_time = 4;
+    uint32 ha_term = 5;
+    bool activate_role_pending = 6;
+    bool flow_reconcile_pending = 7;
+    bool brainsplit_recover_pending = 8;
+}
+
+message HaScopeStateKey {
+    string ha_scope_id = 1;
+}

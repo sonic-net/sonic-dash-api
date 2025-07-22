@@ -41,6 +41,14 @@ TEST(Utils, ValidUrlConversion)
         {"sonic/dash.tunnel.Tunnel", "DASH_TUNNEL_TABLE"},
         {"sonic/dash.vnet_mapping.VnetMapping", "DASH_VNET_MAPPING_TABLE"},
         {"sonic/dash.vnet.Vnet", "DASH_VNET_TABLE"},
+        {"sonic/dash.ha_scope.HaScope", "DASH_HA_SCOPE_TABLE"},
+        {"sonic/dash.ha_set.HaSet", "DASH_HA_SET_TABLE"},
+        {"sonic/dash.ha_set_config.HaSetConfig", "DASH_HA_SET_CONFIG_TABLE"},
+        {"sonic/dash.ha_scope_config.HaScopeConfig", "DASH_HA_SCOPE_CONFIG_TABLE"},
+        {"sonic/dash.ha_set_state.HaSetState", "DASH_HA_SET_STATE_TABLE"},
+        {"sonic/dash.ha_scope_state.HaScopeState", "DASH_HA_SCOPE_STATE_TABLE"},
+        {"sonic/dash.outbound_port_map.OutboundPortMap", "DASH_OUTBOUND_PORT_MAP_TABLE"},
+        {"sonic/dash.outbound_port_map_range.OutboundPortMapRange", "DASH_OUTBOUND_PORT_MAP_RANGE_TABLE"}
     };
     set<string> ignore_files = {
         "types.proto"
@@ -121,7 +129,11 @@ TEST(Utils, CInterface)
     "  \"ipv4\": 16777482\n"
     " },\n"
     " \"vm_vni\": 4321,\n"
-    " \"local_region_id\": 100\n"
+    " \"local_region_id\": 100,\n"
+    " \"trusted_vnis\": {\n"
+    "  \"value\": 100\n"
+    " },\n"
+    " \"outbound_direction_lookup\": \"dst_mac\"\n"
     "}\n";
 
     binary_size = 0;

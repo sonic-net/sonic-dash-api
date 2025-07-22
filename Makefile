@@ -2,6 +2,7 @@
 SHELL = /bin/bash
 .SHELLFLAGS += -e
 
+CXX_FLAGS := -std=c++14 -g -O2
 RM := rm -rf
 CP := cp -rf
 MKDIR := mkdir
@@ -22,14 +23,14 @@ INSTALLED_PYTHON_DIR := $(DESTDIR)/usr/lib/python3/dist-packages/$(PKGNAME)
 PYINCLUDE := $(shell python3 -c "import sys; import sysconfig; sys.stdout.write(sysconfig.get_config_var('INCLUDEPY'))")
 PYLIBRARY := $(shell python3 -c "import sys; import sysconfig; sys.stdout.write(sysconfig.get_config_var('BLDLIBRARY'))")
 
-all: compile_cpp_proto dashapi.so compile_py_proto swig
+all: compile_cpp_proto dashapi.so compile_py_proto swig test
 
 compile_cpp_proto:
 	$(MKDIR) -p $(BUILD_DIR)
 	protoc -I=$(DASH_API_PROTO_DIR) --cpp_out=$(BUILD_DIR) --experimental_allow_proto3_optional $(DASH_API_PROTO_DIR)/*.proto
 
 dashapi.so: compile_cpp_proto
-	g++ -std=c++14 -fPIC -shared -o $(BUILD_DIR)/$(LIBDASHAPI) $(wildcard $(BUILD_DIR)/*.pb.cc) $(wildcard $(MISC_DIR)/*.cpp) -lprotobuf
+	g++ $(CXX_FLAGS) -fPIC -shared -o $(BUILD_DIR)/$(LIBDASHAPI) $(wildcard $(BUILD_DIR)/*.pb.cc) $(wildcard $(MISC_DIR)/*.cpp) -lprotobuf
 
 compile_py_proto:
 	protoc -I=$(DASH_API_PROTO_DIR) --python_out=$(PYPKG_DIR) --experimental_allow_proto3_optional $(DASH_API_PROTO_DIR)/*.proto
@@ -37,7 +38,7 @@ compile_py_proto:
 
 swig:
 	swig -c++ -python -py3 -outdir $(PYPKG_DIR) -o $(BUILD_DIR)/utils_wrap.cpp $(MISC_DIR)/utils.i
-	g++ -std=c++14 -shared -I$(PYINCLUDE) -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) $(PYLIBRARY) -lprotobuf
+	g++ $(CXX_FLAGS) -shared -I$(PYINCLUDE) -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) $(PYLIBRARY) -lprotobuf
 
 clean:
 	$(RM) $(BUILD_DIR)
