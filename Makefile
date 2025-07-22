@@ -27,14 +27,14 @@ all: compile_cpp_proto dashapi.so compile_py_proto swig test
 
 compile_cpp_proto:
 	$(MKDIR) -p $(BUILD_DIR)
-	protoc -I=$(DASH_API_PROTO_DIR) --cpp_out=$(BUILD_DIR) $(DASH_API_PROTO_DIR)/*.proto
+	protoc -I=$(DASH_API_PROTO_DIR) --cpp_out=$(BUILD_DIR) --experimental_allow_proto3_optional $(DASH_API_PROTO_DIR)/*.proto
 
 dashapi.so: compile_cpp_proto
 	g++ $(CXX_FLAGS) -fPIC -shared -o $(BUILD_DIR)/$(LIBDASHAPI) $(wildcard $(BUILD_DIR)/*.pb.cc) $(wildcard $(MISC_DIR)/*.cpp) -lprotobuf
 
 compile_py_proto:
-	protoc -I=$(DASH_API_PROTO_DIR) --python_out=$(PYPKG_DIR) $(DASH_API_PROTO_DIR)/*.proto
-	protoc -I=$(DASH_API_PROTO_DIR) --pyi_out=$(PYPKG_DIR) $(DASH_API_PROTO_DIR)/*.proto
+	protoc -I=$(DASH_API_PROTO_DIR) --python_out=$(PYPKG_DIR) --experimental_allow_proto3_optional $(DASH_API_PROTO_DIR)/*.proto
+	protoc -I=$(DASH_API_PROTO_DIR) --pyi_out=$(PYPKG_DIR) --experimental_allow_proto3_optional $(DASH_API_PROTO_DIR)/*.proto
 
 swig:
 	swig -c++ -python -py3 -outdir $(PYPKG_DIR) -o $(BUILD_DIR)/utils_wrap.cpp $(MISC_DIR)/utils.i
