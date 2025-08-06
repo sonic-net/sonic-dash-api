@@ -15,6 +15,10 @@ message HaScope {
     bool flow_reconcile_requested = 4;
     // If true, HA role will be activated. (Message Only. Not saved in DB.)
     bool activate_role_requested = 5;
+
+    string ha_set_id = 6;
+    types.IpAddress vip_v4 = 7;
+    types.IpAddress vip_v6 = 8;
 }
 
 message HaScopeKey {
