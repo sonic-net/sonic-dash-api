@@ -1,0 +1,42 @@
+[workspace]
+resolver = '2'
+members = [
+    "crates/sonic-dash-api-proto",
+]
+exclude = []
+
+[workspace.package]
+version = "0.1.0"
+authors = ["SONiC"]
+license = "Apache-2.0"
+repository = "https://github.com/sonic/sonic-dash-api"
+documentation = "https://github.com/sonic-net/sonic-dash-api/blob/master/README.md"
+keywords = ["sonic", "sonic-dash-api"]
+edition = "2021"
+
+[workspace.lints.rust]
+unused_extern_crates = 'warn'
+trivial_numeric_casts = 'warn'
+unstable_features = 'warn'
+unused_import_braces = 'warn'
+
+[workspace.dependencies]
+# Serialization
+serde = { version = "1", features = ["derive", "rc"] }
+serde_json = "1"
+
+# grpc
+prost = "0.13"
+prost-build = "0.13"
+
+# Utilities
+hex = "0.4"
+strum = { version = "0.26", features = ["derive"] }
+strum_macros = "0.26"
+
+# Internal dependencies
+#swss-common = { git = "https://github.com/sonic-net/sonic-swss-common.git", branch = "master" }
+#sonicdb-derive = { git = "https://github.com/sonic-net/sonic-swss-common.git", branch = "master" }
+swss-common = { git = "https://github.com/yue-fred-gao/sonic-swss-common.git", branch = "relocate_sonicdb" }
+sonicdb-derive = { git = "https://github.com/yue-fred-gao/sonic-swss-common.git", branch = "relocate_sonicdb" }
+sonicdb = { git = "https://github.com/yue-fred-gao/sonic-swss-common.git", branch = "relocate_sonicdb" }
