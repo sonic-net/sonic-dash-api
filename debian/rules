@@ -6,3 +6,7 @@
 
 override_dh_auto_build:
 	make all
+	cargo build --release --workspace
+
+override_dh_auto_clean:
+	cargo clean --release
