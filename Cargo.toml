@@ -35,8 +35,6 @@ strum = { version = "0.26", features = ["derive"] }
 strum_macros = "0.26"
 
 # Internal dependencies
-#swss-common = { git = "https://github.com/sonic-net/sonic-swss-common.git", branch = "master" }
-#sonicdb-derive = { git = "https://github.com/sonic-net/sonic-swss-common.git", branch = "master" }
-swss-common = { git = "https://github.com/yue-fred-gao/sonic-swss-common.git", branch = "relocate_sonicdb" }
-sonicdb-derive = { git = "https://github.com/yue-fred-gao/sonic-swss-common.git", branch = "relocate_sonicdb" }
-sonicdb = { git = "https://github.com/yue-fred-gao/sonic-swss-common.git", branch = "relocate_sonicdb" }
+swss-common = { git = "https://github.com/sonic-net/sonic-swss-common.git", branch = "master" }
+sonicdb-derive = { git = "https://github.com/sonic-net/sonic-swss-common.git", branch = "master" }
+sonicdb = { git = "https://github.com/sonic-net/sonic-swss-common.git", branch = "master" }
