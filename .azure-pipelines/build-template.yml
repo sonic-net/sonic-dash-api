@@ -10,9 +10,9 @@ parameters:
 - name: pool
   type: string
   values:
-  - sonicbld-1es
-  - sonicbld-armhf
-  - sonicbld-arm64
+  - sonicso1ES-amd64
+  - sonicso1ES-armhf
+  - sonicso1ES-arm64
   - default
   default: default
 
@@ -49,7 +49,7 @@ jobs:
       project: build
       pipeline: Azure.sonic-buildimage.common_libs
       runVersion: 'latestFromBranch'
-      runBranch: 'refs/heads/master'
+      runBranch: 'refs/heads/202311'
       path: $(Build.ArtifactStagingDirectory)/download
       ${{ if eq(parameters.arch, 'amd64') }}:
         artifact: common-lib
