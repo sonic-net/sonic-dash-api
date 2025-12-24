@@ -27,7 +27,6 @@ stages:
     parameters:
       arch: amd64
       pool: sonicso1ES-amd64
-      sonic_slave: sonic-slave-${{ parameters.debian_version }}
       debian_version: ${{ parameters.debian_version }}
       artifact_name: sonic-dash-api
 
@@ -64,13 +63,11 @@ stages:
     parameters:
       arch: armhf
       pool: sonicso1ES-armhf
-      sonic_slave: sonic-slave-${{ parameters.debian_version }}-armhf
       debian_version: ${{ parameters.debian_version }}
       artifact_name: sonic-dash-api.armhf
   - template: .azure-pipelines/build-template.yml
     parameters:
       arch: arm64
       pool: sonicso1ES-arm64
-      sonic_slave: sonic-slave-${{ parameters.debian_version }}-arm64
       debian_version: ${{ parameters.debian_version }}
       artifact_name: sonic-dash-api.arm64
