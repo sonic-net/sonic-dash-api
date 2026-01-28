@@ -25,6 +25,7 @@ TEST(Utils, ValidUrlConversion)
         {"sonic/dash.acl_out.AclOut", "DASH_ACL_OUT_TABLE"},
         {"sonic/dash.acl_rule.AclRule", "DASH_ACL_RULE_TABLE"},
         {"sonic/dash.appliance.Appliance", "DASH_APPLIANCE_TABLE"},
+        {"sonic/dash.dpu_reset_info.DpuResetInfo", "DASH_DPU_RESET_INFO_TABLE"},
         {"sonic/dash.eni.Eni", "DASH_ENI_TABLE"},
         {"sonic/dash.eni_route.EniRoute", "DASH_ENI_ROUTE_TABLE"},
         {"sonic/dash.meter_policy.MeterPolicy", "DASH_METER_POLICY_TABLE"},
