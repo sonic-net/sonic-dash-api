@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package dash.dpu_reset_info;
+
+import "google/protobuf/timestamp.proto";
+
+message DpuResetInfo {
+    bool reset_status = 1;
+    google.protobuf.Timestamp last_reset_status_update = 2;
+}
+
+message DpuResetInfoKey {
+    string vdpu_id = 1;
+}
