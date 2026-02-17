@@ -133,6 +133,11 @@ TEST(Utils, CInterface)
     " \"trusted_vnis\": {\n"
     "  \"value\": 100\n"
     " },\n"
+    " \"trusted_vnis_list\": [\n"
+    "  {\n"
+    "   \"value\": 100\n"
+    "  }\n"
+    " ],\n"
     " \"outbound_direction_lookup\": \"dst_mac\"\n"
     "}\n";
 
