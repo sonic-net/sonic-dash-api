@@ -47,7 +47,12 @@ def test_dash_api_utils():
  },
  "vm_vni": 4321,
  "local_region_id": 100,
- "outbound_direction_lookup": "dst_mac"
+ "outbound_direction_lookup": "dst_mac",
+ "trusted_vnis_list": [
+  {
+   "value": 100
+  }
+ ]
 }
     '''
     result = runner.invoke(utils_cli.utils_cli,

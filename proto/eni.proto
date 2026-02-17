@@ -41,7 +41,8 @@ message Eni {
     optional string v6_meter_policy_id = 10;
     optional bool disable_fast_path_icmp_flow_redirection = 11;
     optional EniMode eni_mode = 12;
-    optional types.ValueOrRange trusted_vnis = 13;
+    optional types.ValueOrRange trusted_vnis = 13; // Will be deprecated in the future, don't add deprecation tag now since it will break SWSS build
+    repeated types.ValueOrRange trusted_vnis_list = 14;
 }
 
 message EniKey {
