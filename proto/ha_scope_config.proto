@@ -9,6 +9,7 @@ enum DesiredHaState {
     DESIRED_HA_STATE_DEAD = 1;
     DESIRED_HA_STATE_ACTIVE = 2;
     DESIRED_HA_STATE_STANDALONE = 3;
+    DESIRED_HA_STATE_STANDBY = 4;
 }
 
 message HaScopeConfig {
