@@ -13,7 +13,8 @@ message Appliance {
     uint32 local_region_id = 3;
     // outbound direction lookup. Must be either "dst_mac" or "src_mac"
     optional string outbound_direction_lookup = 4;
-    optional types.ValueOrRange trusted_vnis = 5;
+    optional types.ValueOrRange trusted_vnis = 5; // Will be deprecated in the future, don't add deprecation tag now since it will break SWSS build
+    repeated types.ValueOrRange trusted_vnis_list = 6;
 }
 
 message ApplianceKey {
