@@ -8,7 +8,7 @@ message RouteRule {
     // reference to action type, action can be decap or drop
     route_type.ActionType action_type = 1; 
     // priority of the rule, lower the value, higher the priority
-    uint32 priority = 2;
+    uint32 priority = 2; // this is deprecated and moved to the key (https://github.com/sonic-net/SONiC/pull/2091). don't delete field yet until orchagent implementation can be updated otherwise the swss build will break.
     // Optional
     // protocol value of incoming packet to match; 0 (any)
     optional uint32 protocol = 3;
@@ -40,4 +40,5 @@ message RouteRuleKey {
         string prefix = 3;
         string tag = 4;
     }
+    uint32 priority = 5;
 };
