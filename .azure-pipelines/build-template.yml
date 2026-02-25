@@ -39,7 +39,7 @@ jobs:
   - script: |
       set -e
       sudo apt-get update
-      sudo apt-get install -y make libboost1.83-all-dev libgtest-dev build-essential swig4.0
+      sudo apt-get install -y make libboost-filesystem1.83-dev libboost-system1.83-dev libgtest-dev build-essential swig
     displayName: "Install dependencies"
   - script: |
       set -e
