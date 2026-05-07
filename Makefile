@@ -38,7 +38,7 @@ compile_py_proto:
 
 swig: compile_cpp_proto
 	swig -c++ -python -py3 -outdir $(PYPKG_DIR) -o $(BUILD_DIR)/utils_wrap.cpp $(MISC_DIR)/utils.i
-	g++ $(CXX_FLAGS) -shared -I$(PYINCLUDE) -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) $(PYLIBRARY) -lprotobuf
+	g++ $(CXX_FLAGS) -shared -I$(PYINCLUDE) -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) -lprotobuf
 
 clean:
 	$(RM) $(BUILD_DIR)
