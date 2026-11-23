@@ -2,7 +2,7 @@
 SHELL = /bin/bash
 .SHELLFLAGS += -e
 
-CXX_FLAGS := -std=c++14 -g -O2
+CXX_FLAGS := $(CPPFLAGS) $(CXXFLAGS) -std=c++14 -g -O2
 RM := rm -rf
 CP := cp -rf
 MKDIR := mkdir
@@ -30,7 +30,7 @@ compile_cpp_proto:
 	protoc -I=$(DASH_API_PROTO_DIR) --cpp_out=$(BUILD_DIR) --experimental_allow_proto3_optional $(DASH_API_PROTO_DIR)/*.proto
 
 dashapi.so: compile_cpp_proto
-	g++ $(CXX_FLAGS) -fPIC -shared -o $(BUILD_DIR)/$(LIBDASHAPI) $(wildcard $(BUILD_DIR)/*.pb.cc) $(wildcard $(MISC_DIR)/*.cpp) -lprotobuf
+	g++ $(CXX_FLAGS) -fPIC -shared $(LDFLAGS) -o $(BUILD_DIR)/$(LIBDASHAPI) $(wildcard $(BUILD_DIR)/*.pb.cc) $(wildcard $(MISC_DIR)/*.cpp) -lprotobuf
 
 compile_py_proto:
 	protoc -I=$(DASH_API_PROTO_DIR) --python_out=$(PYPKG_DIR) --experimental_allow_proto3_optional $(DASH_API_PROTO_DIR)/*.proto
@@ -38,7 +38,7 @@ compile_py_proto:
 
 swig: compile_cpp_proto
 	swig -c++ -python -py3 -outdir $(PYPKG_DIR) -o $(BUILD_DIR)/utils_wrap.cpp $(MISC_DIR)/utils.i
-	g++ $(CXX_FLAGS) -shared -I$(PYINCLUDE) -fPIC -I$(MISC_DIR) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) -lprotobuf
+	g++ $(CXX_FLAGS) -shared -I$(PYINCLUDE) -fPIC -I$(MISC_DIR) $(LDFLAGS) -o $(PYPKG_DIR)/_utils.so $(MISC_DIR)/utils.cpp $(BUILD_DIR)/utils_wrap.cpp $(wildcard $(BUILD_DIR)/*.pb.cc) -lprotobuf
 
 clean:
 	$(RM) $(BUILD_DIR)
@@ -68,7 +68,7 @@ uninstall:
 	$(RM) $(INSTALLED_PYTHON_DIR)
 
 test: swig dashapi.so
-	g++ -std=c++14 \
+	g++ $(CXX_FLAGS) $(LDFLAGS) \
 		-D PROTO_PATH=\"$(DASH_API_PROTO_DIR)\" \
 		-I $(BUILD_DIR) -I $(MISC_DIR) \
 		$(wildcard $(TEST_DIR)/*.cpp) \
