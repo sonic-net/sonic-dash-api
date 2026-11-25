@@ -1,0 +1,199 @@
+load("@protobuf_legacy//:defs.bzl", "cpp_proto_sources", "python_proto_sources")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_import", "cc_library")
+load("@sonic_build_infra//oci:runtime_packages.bzl", "runtime_packages")
+load("@sonic_build_infra//tar:sonic_deploy_tar.bzl", "sonic_deploy_tar")
+
+package(default_visibility = ["//visibility:public"])
+
+_PROTOS = glob(["proto/*.proto"])
+
+_PROTO_NAMES = [path.removeprefix("proto/").removesuffix(".proto") for path in _PROTOS]
+
+exports_files(_PROTOS)
+
+cpp_proto_sources(
+    name = "cpp_generated",
+    srcs = _PROTOS,
+    output_prefix = "generated/dash_api",
+    strip_import_prefix = "proto",
+)
+
+python_proto_sources(
+    name = "python_generated",
+    srcs = _PROTOS,
+    output_prefix = "generated/dash_api",
+    strip_import_prefix = "proto",
+)
+
+filegroup(
+    name = "proto_sources",
+    srcs = _PROTOS,
+)
+
+filegroup(
+    name = "generated_sources",
+    srcs = [":cpp_generated"],
+    output_group = "sources",
+)
+
+filegroup(
+    name = "proto_headers",
+    srcs = [":cpp_generated"],
+    output_group = "headers",
+)
+
+filegroup(
+    name = "proto_python",
+    srcs = [":python_generated"],
+    output_group = "python",
+)
+
+filegroup(
+    name = "proto_python_stubs",
+    srcs = [":python_generated"],
+    output_group = "pyi",
+)
+
+genrule(
+    name = "public_utils_header",
+    srcs = ["//misc:utils.h"],
+    outs = ["generated/dash_api/utils.h"],
+    cmd = "cp $(location //misc:utils.h) $@",
+)
+
+filegroup(
+    name = "generated_headers",
+    srcs = [
+        ":proto_headers",
+        ":public_utils_header",
+    ],
+)
+
+# Dynamic JSON conversion finds descriptors by name. Keep every proto's
+# registration code even when no consumer references its C++ message class.
+cc_library(
+    name = "dashapi_objects",
+    srcs = [
+        ":generated_sources",
+        "//misc:utils.cpp",
+    ],
+    hdrs = [
+        ":proto_headers",
+        "//misc:utils.h",
+    ],
+    copts = ["-std=c++14"],
+    includes = [
+        "generated/dash_api",
+        "misc",
+    ],
+    deps = ["@protobuf_legacy//:libprotobuf"],
+    alwayslink = True,
+)
+
+cc_binary(
+    name = "libdashapi.so",
+    linkopts = [
+        "-Wl,-soname,libdashapi.so",
+        "-Wl,--build-id=sha1",
+    ],
+    linkshared = True,
+    linkstatic = True,
+    deps = [":dashapi_objects"],
+)
+
+cc_import(
+    name = "dashapi_dso",
+    shared_library = ":libdashapi.so",
+)
+
+cc_library(
+    name = "dashapi",
+    hdrs = [":generated_headers"],
+    includes = [
+        "generated",
+        "generated/dash_api",
+    ],
+    deps = [
+        ":dashapi_dso",
+        "@protobuf_legacy//:libprotobuf",
+    ],
+)
+
+alias(
+    name = "shared_library",
+    actual = ":libdashapi.so",
+)
+
+# Stage the dependency's source-built runtime and matching symbols alongside
+# DASH's own runtime/debug archives without changing DASH's install inventory.
+alias(
+    name = "protobuf_runtime_pkg",
+    actual = "@protobuf_legacy//:libprotobuf_pkg",
+)
+
+alias(
+    name = "protobuf_debug_pkg",
+    actual = "@protobuf_legacy//:libprotobuf_pkg.debug_symbols",
+)
+
+# Define each non-ELF install entry once: source, installed path, file mode.
+_INSTALL_FILES = [
+    (
+        "generated/dash_api/" + name + suffix,
+        directory + name + suffix,
+        "0644",
+    )
+    for name in _PROTO_NAMES
+    for suffix, directory in [
+        (".pb.h", "./usr/include/dash_api/"),
+        ("_pb2.py", "./usr/lib/python3/dist-packages/dash_api/"),
+        ("_pb2.pyi", "./usr/lib/python3/dist-packages/dash_api/"),
+    ]
+] + [
+    (":public_utils_header", "./usr/include/dash_api/utils.h", "0644"),
+    ("//misc:pypkg/dash_api/__init__.py", "./usr/lib/python3/dist-packages/dash_api/__init__.py", "0644"),
+    ("//misc:utils_python", "./usr/lib/python3/dist-packages/dash_api/utils.py", "0644"),
+    ("//misc:dash_api_utils", "./usr/bin/dash_api_utils", "0755"),
+]
+
+# Match Make's installed paths. Split symbols from the same linked ELF files.
+sonic_deploy_tar(
+    name = "libdashapi_pkg",
+    srcs = [entry[0] for entry in _INSTALL_FILES],
+    binaries = {
+        "./usr/lib/libdashapi.so uid=0 gid=0 mode=0644 time=0 type=file": ":libdashapi.so",
+        "./usr/lib/python3/dist-packages/dash_api/_utils.so uid=0 gid=0 mode=0644 time=0 type=file": "//misc:_utils.so",
+    },
+    force_debug_build = True,
+    mtree = [
+        "{} uid=0 gid=0 mode={} time=0 type=file content=$(location {})".format(destination, mode, source)
+        for source, destination, mode in _INSTALL_FILES
+    ],
+)
+
+# Preserve HA's selected wire schema without changing the current C++/Python API.
+# HA owns its Rust adapter and prost generator; this owner supplies the inputs.
+filegroup(
+    name = "ha_schema_sources",
+    srcs = [
+        "@dash_ha_schema//:proto/ha_scope_config.proto",
+        "@dash_ha_schema//:proto/ha_set_config.proto",
+        "@dash_ha_schema//:proto/types.proto",
+    ],
+)
+
+# Publish package facts from the owning Debian recipe and this exact runtime TAR.
+runtime_packages(
+    name = "runtime_packages.json",
+    apt_packages = {
+        "@dash_runtime_debian//libprotobuf32t64:data": "@dash_runtime_debian//libprotobuf32t64:control",
+    },
+    changelog = "debian/changelog",
+    control = "debian/control",
+    debian_files = {"compat": "debian/compat"},
+    packages = {"libdashapi": ":libdashapi_pkg"},
+    required_paths = {"libdashapi": [
+        "usr/lib/libdashapi.so",
+        "usr/lib/python3/dist-packages/dash_api/_utils.so",
+    ]},
+)

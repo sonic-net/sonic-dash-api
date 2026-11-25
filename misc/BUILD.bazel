@@ -1,0 +1,125 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+load("@sonic_build_infra//swig:defs.bzl", "swig_gen", "swig_lib_deb")
+load(":python_proto_package.bzl", "python_proto_package")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "dash_api_utils",
+    "pypkg/dash_api/__init__.py",
+    "tests/main.cpp",
+    "tests/test_utils.py",
+    "tests/utils_unittest.cpp",
+    "utils.cpp",
+    "utils.h",
+])
+
+swig_lib_deb(
+    name = "swig_lib",
+    data = "@trixie//swig",
+    strip_prefix = "usr/share/swig/4.3.0",
+)
+
+swig_gen(
+    name = "utils_bindings",
+    hdrs = ["utils.h"],
+    cpp_out = "generated/utils_wrap.cpp",
+    interface = "utils.i",
+    python_out = "pypkg/dash_api/utils.py",
+    swig_lib = ":swig_lib",
+)
+
+# Match Make: the extension embeds DASH's utility/protobuf objects, and resolves
+# Python symbols from its interpreter instead of linking against libpython.
+# Its runtime tar targets Python 3.13 even when a consuming root selects a
+# different default interpreter. Select those versioned headers explicitly.
+cc_binary(
+    name = "pypkg/dash_api/_utils.so",
+    srcs = ["generated/utils_wrap.cpp"],
+    copts = ["-std=c++14"],
+    linkopts = ["-Wl,--build-id=sha1"],
+    linkshared = True,
+    linkstatic = True,
+    deps = [
+        "//:dashapi_objects",
+        "@python_3_13//:python_headers",
+    ],
+)
+
+alias(
+    name = "_utils.so",
+    actual = ":pypkg/dash_api/_utils.so",
+)
+
+alias(
+    name = "utils_python",
+    actual = ":pypkg/dash_api/utils.py",
+)
+
+python_proto_package(
+    name = "proto_package",
+    srcs = [
+        "//:proto_python",
+        "//:proto_python_stubs",
+    ],
+)
+
+filegroup(
+    name = "proto_python",
+    srcs = [":proto_package"],
+    output_group = "python",
+)
+
+filegroup(
+    name = "proto_stubs",
+    srcs = [":proto_package"],
+    output_group = "pyi",
+)
+
+filegroup(
+    name = "python_package_files",
+    srcs = [
+        "pypkg/dash_api/__init__.py",
+        ":_utils.so",
+        ":proto_package",
+        ":utils_python",
+    ],
+)
+
+py_library(
+    name = "dash_api",
+    srcs = [
+        "pypkg/dash_api/__init__.py",
+        ":proto_python",
+        ":utils_python",
+    ],
+    data = [
+        ":_utils.so",
+        ":proto_stubs",
+    ],
+    imports = ["pypkg"],
+    deps = ["@dash_pypi//protobuf"],
+)
+
+py_test(
+    name = "python_test",
+    srcs = ["//bazel:python_test_runner.py"],
+    args = [
+        "--legacy-test=$(rlocationpath :tests/test_utils.py)",
+    ] + ["--proto-paths"] + ["$(rlocationpaths //:proto_sources)"],
+    data = [
+        ":dash_api_utils",
+        ":tests/test_utils.py",
+        "//:proto_sources",
+    ],
+    legacy_create_init = False,
+    main = "//bazel:python_test_runner.py",
+    python_version = "3.13",
+    deps = [
+        ":dash_api",
+        "@dash_pypi//click",
+        "@dash_pypi//pytest",
+        "@rules_python//python/runfiles",
+    ],
+)

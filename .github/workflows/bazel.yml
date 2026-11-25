@@ -1,0 +1,228 @@
+name: Bazel
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bazel-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    name: Bazel (${{ matrix.arch }})
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: AMD64
+            architecture: amd64
+            machine: x86_64
+            runner: ubuntu-24.04
+            bazel_arch: x86_64
+            bazel_sha: 61d89402f0368e64b6c827be5de79d8e65382e8124c3cbb97325611a1851392e
+            bazel_args: ""
+            bazel_config: default
+          - arch: ARM64
+            architecture: arm64
+            machine: aarch64
+            runner: ubuntu-24.04-arm
+            bazel_arch: arm64
+            bazel_sha: b7f2a85595e8a87d54843bc656c1e379fd9b8c1b5f783dc41717c1d7eb7cc49f
+            bazel_args: --config=aarch64
+            bazel_config: aarch64
+    runs-on: ${{ matrix.runner }}
+    container:
+      # This immutable multiarchitecture manifest selects the native image.
+      image: debian:trixie-20260713@sha256:fac46bff2e02f51425b6e33b0e1169f55dfb053d83511ca28aa50c09fd5ed7a4
+      options: --init
+    defaults:
+      run:
+        shell: bash
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      CI_IMAGE: debian:trixie-20260713@sha256:fac46bff2e02f51425b6e33b0e1169f55dfb053d83511ca28aa50c09fd5ed7a4
+    steps:
+      - name: Install build and archive inspection tools
+        run: |
+          # Match the pinned sonic-build-infra APT snapshots. HTTP bootstraps
+          # ca-certificates; APT still verifies Debian's signed Release files.
+          rm -f /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources
+          cat > /etc/apt/sources.list.d/debian.sources <<'EOF'
+          Types: deb
+          URIs: http://snapshot.debian.org/archive/debian/20260727T143429Z/
+          Suites: trixie trixie-updates
+          Components: main
+          Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+          Check-Valid-Until: no
+
+          Types: deb
+          URIs: http://snapshot.debian.org/archive/debian-security/20260726T121236Z/
+          Suites: trixie-security
+          Components: main
+          Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+          Check-Valid-Until: no
+          EOF
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            binutils build-essential ca-certificates curl gdb git python3 tar xz-utils
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Verify native Trixie environment
+        run: |
+          source /etc/os-release
+          test "$ID" = debian
+          test "$VERSION_CODENAME" = trixie
+          test "$(uname -m)" = '${{ matrix.machine }}'
+          test "$(dpkg --print-architecture)" = '${{ matrix.architecture }}'
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          mkdir -p artifacts/validation
+          cp /etc/os-release artifacts/validation/os-release
+          cp /etc/apt/sources.list.d/debian.sources artifacts/validation/apt-sources.sources
+          apt-cache policy > artifacts/validation/apt-policy.txt
+          dpkg-query -W -f='${binary:Package}\t${Version}\n' > artifacts/validation/host-packages.txt
+
+      - name: Verify the checkout has no committed dependency lock
+        run: |
+          test ! -e MODULE.bazel.lock
+          test -z "$(git ls-files -- MODULE.bazel.lock)"
+          git check-ignore --quiet --no-index MODULE.bazel.lock
+
+      - name: Install pinned Bazel
+        run: |
+          test "$(cat .bazelversion)" = 8.5.1
+          curl --fail --location --retry 3 --output /tmp/bazel \
+            'https://releases.bazel.build/8.5.1/release/bazel-8.5.1-linux-${{ matrix.bazel_arch }}'
+          printf '%s  %s\n' '${{ matrix.bazel_sha }}' /tmp/bazel | sha256sum --check --strict
+          install -m 0755 /tmp/bazel /usr/local/bin/bazel
+
+      - name: Select and record the maintained registry revision
+        run: |
+          python3 - <<'PYTHON'
+          import json
+          from pathlib import Path
+          import re
+          import subprocess
+          main = "https://raw.githubusercontent.com/sonic-net/sonic-bazel-registry/main"
+          ref = "refs/heads/main"
+          advertised = subprocess.check_output(["git", "ls-remote",
+              "https://github.com/sonic-net/sonic-bazel-registry.git", ref], text=True).split()
+          assert len(advertised) == 2 and advertised[1] == ref
+          revision = advertised[0]
+          assert re.fullmatch(r"[0-9a-f]{40}", revision)
+          registry = main
+          configuration = Path(".bazelrc").read_text()
+          assert configuration.count(main) == 1
+          artifacts = Path("artifacts/validation").resolve()
+          artifacts.mkdir(parents=True, exist_ok=True)
+          (artifacts / "declared.bazelrc").write_text(configuration)
+          effective = artifacts / "effective.bazelrc"
+          effective.write_text(configuration)
+          (artifacts / "registry-inputs.json").write_text(json.dumps({
+              "declared_registry": main, "registry": registry,
+              "observed_revision": revision, "draft_validation": False,
+          }, indent=2) + "\n")
+          PYTHON
+
+      - name: Test artifact collection paths
+        run: python3 -m unittest discover -s bazel/ci -p collect_artifacts_test.py
+
+      - name: Check Bazel formatting
+        run: >-
+          bazel run ${{ matrix.bazel_args }} --lockfile_mode=update
+          @buildifier_prebuilt//:buildifier -- -mode=check -r "$GITHUB_WORKSPACE"
+
+      - name: Build DASH and Protobuf tars and run native consumer and contract tests
+        run: >-
+          bazel test ${{ matrix.bazel_args }} --jobs=4 --lockfile_mode=update
+          --nocache_test_results --test_output=errors
+          --build_event_json_file="$GITHUB_WORKSPACE/artifacts/validation/build-test-events.json"
+          //bazel:source_contract_test //bazel:runtime_consumer_test
+          //bazel:utils_test //bazel:python_test //bazel:ha_schema_test
+
+      - name: Build producer package metadata
+        run: |
+          bazel build ${{ matrix.bazel_args }} --lockfile_mode=update //:runtime_packages.json
+          cp bazel-bin/runtime_packages.json artifacts/validation/runtime_packages.json
+
+      - name: Stage runtime and debug tars and test their installed consumers
+        run: |
+          # DASH and its shared C++ Protobuf runtime come from source-built
+          # tars. The remaining dependencies use the signed toolchain snapshots.
+          apt-get install -y --no-install-recommends \
+            libc6 libgcc-s1 libstdc++6 \
+            python3 python3-click python3-protobuf
+          runtime_tar="$(bazel cquery ${{ matrix.bazel_args }} --lockfile_mode=update //:libdashapi_pkg --output=files)"
+          debug_tar="$(bazel cquery ${{ matrix.bazel_args }} --lockfile_mode=update //:libdashapi_pkg.debug_symbols --output=files)"
+          protobuf_runtime_tar="$(bazel cquery ${{ matrix.bazel_args }} --lockfile_mode=update //:protobuf_runtime_pkg --output=files)"
+          protobuf_debug_tar="$(bazel cquery ${{ matrix.bazel_args }} --lockfile_mode=update //:protobuf_debug_pkg --output=files)"
+          test -f "$runtime_tar"
+          test -f "$debug_tar"
+          test -f "$protobuf_runtime_tar"
+          test -f "$protobuf_debug_tar"
+          tar --extract --file "$protobuf_runtime_tar" --directory /
+          tar --extract --file "$protobuf_debug_tar" --directory /
+          tar --extract --file "$runtime_tar" --directory /
+          tar --extract --file "$debug_tar" --directory /
+          ldconfig
+          env -u LD_LIBRARY_PATH -u PYTHONPATH \
+            python3 bazel/installed_tar_test.py \
+            --protobuf-runtime-tar "$protobuf_runtime_tar" \
+            2>&1 | tee artifacts/validation/installed-tar-test.log
+          dpkg-query -W -f='${binary:Package}\t${Version}\n' \
+            > artifacts/validation/installed-packages.txt
+          apt-cache policy python3-protobuf \
+            > artifacts/validation/installed-runtime-policy.txt
+
+      - name: Record source generation and compilation actions
+        run: >-
+          bazel aquery ${{ matrix.bazel_args }} --lockfile_mode=update
+          'mnemonic("CppCompile|ProtoCompile|SwigGen.*", deps(//:libdashapi_pkg))'
+          --output=jsonproto > artifacts/validation/source-actions.json
+
+      - name: Verify source-built Protobuf compiler version
+        run: |
+          bazel run ${{ matrix.bazel_args }} --lockfile_mode=update \
+            @protobuf_legacy//:protoc -- --version \
+            | tee artifacts/validation/protoc-version.txt
+          test "$(cat artifacts/validation/protoc-version.txt)" = 'libprotoc 3.21.12'
+
+      - name: Collect source-built tars and provenance
+        run: >-
+          python3 bazel/ci/collect_artifacts.py
+          --architecture '${{ matrix.architecture }}'
+          --bazel-config '${{ matrix.bazel_config }}'
+          --image "$CI_IMAGE" --output-dir artifacts
+
+      - name: Verify generated dependency resolution leaves tracked files clean
+        run: |
+          test -z "$(git status --porcelain --untracked-files=no)"
+
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sonic-dash-api-validation-${{ matrix.arch }}-${{ github.sha }}
+          path: artifacts/validation/
+          if-no-files-found: warn
+          include-hidden-files: true
+
+      - name: Upload runtime and matching debug tars
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sonic-dash-api-packages-${{ matrix.arch }}-${{ github.sha }}
+          path: |
+            artifacts/packages/
+            artifacts/development/
+            artifacts/consumer/
+            artifacts/provenance.json
+          if-no-files-found: error

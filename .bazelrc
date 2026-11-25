@@ -1,0 +1,16 @@
+# Use the maintained registry now that the required Protobuf entries have landed.
+# Registry entries retain pinned module sources, compiler/runtime inputs and hashes.
+common --registry=https://raw.githubusercontent.com/sonic-net/sonic-bazel-registry/main
+common --registry=https://bcr.bazel.build/
+
+# Run in native Debian Trixie with matching execution and target architectures.
+common --platforms=@sonic_build_infra//platforms:x86_64_trixie
+common --host_platform=@sonic_build_infra//platforms:x86_64_trixie
+common:aarch64 --platforms=@sonic_build_infra//platforms:aarch64_trixie
+common:aarch64 --host_platform=@sonic_build_infra//platforms:aarch64_trixie
+
+# Match the legacy optimized build; deploy targets retain and split DWARF.
+build --compilation_mode=opt
+
+# Dependencies do not import their .bazelrc; select cached kernel tools here.
+build --remote_download_regex=(^|.*/)tools/build_tools/kernel_runtime_(amd64|arm64)(/.*)?$

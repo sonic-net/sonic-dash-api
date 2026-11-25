@@ -1,0 +1,94 @@
+module(
+    name = "sonic-dash-api",
+    version = "0.0.6",
+    bazel_compatibility = [
+        ">=8.5.1",
+        "<=8.5.1",
+    ],
+)
+
+bazel_dep(name = "buildifier_prebuilt", version = "8.5.1.3", dev_dependency = True)
+
+bazel_dep(name = "googletest", version = "1.14.0.bcr.1", repo_name = "com_google_googletest")
+bazel_dep(name = "platforms", version = "1.1.0")
+bazel_dep(name = "rules_cc", version = "0.2.20")
+bazel_dep(name = "rules_distroless", version = "0.9.4.sonic.26")
+bazel_dep(name = "rules_python", version = "1.9.0.sonic.2")
+bazel_dep(name = "protobuf-legacy", version = "3.21.12.sonic.4", repo_name = "protobuf_legacy")
+bazel_dep(name = "sonic-build-infra", version = "0.0.45-77ef625a4ddafc8cdc15f3cc6aee31eabac8a5de", repo_name = "sonic_build_infra")
+bazel_dep(name = "tar.bzl", version = "0.10.5.sonic.2")
+
+# Keep the Trixie C++ toolchain compatible with Bazel 8.5.1.
+single_version_override(
+    module_name = "rules_cc",
+    version = "0.2.20",
+)
+
+# The SONiC deployment rule needs the patched deterministic-time tar API.
+# Dependency overrides do not propagate into this root.
+single_version_override(
+    module_name = "tar.bzl",
+    version = "0.10.5.sonic.2",
+)
+
+# Native execution and target toolchains share the pinned SONiC Trixie inputs.
+gcc = use_extension("@sonic_build_infra//toolchains/gcc:extensions.bzl", "gcc")
+use_repo(gcc, "gcc_toolchains")
+
+register_toolchains("@gcc_toolchains//:all")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(python_version = "3.13")
+use_repo(python, "python_3_13")
+
+register_toolchains("@python_3_13//:all")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "dash_pypi",
+    python_version = "3.13",
+    requirements_lock = "//bazel:requirements_lock.txt",
+)
+use_repo(pip, "dash_pypi")
+
+apt = use_extension("@rules_distroless//apt:extensions.bzl", "apt")
+use_repo(apt, "trixie")
+
+apt.install(
+    dependency_set = "dash_test_debian",
+    packages = [
+        "libboost-filesystem-dev",
+        "libboost-system-dev",
+    ],
+    suites = [
+        "trixie",
+        "trixie-updates",
+        "trixie-security",
+    ],
+)
+use_repo(apt, "dash_test_debian")
+
+# sonic-dash-ha's selected Git submodule. Its HaScopeConfigKey field numbers
+# differ from the current API, so retain a distinct owner-exported source set.
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "dash_ha_schema",
+    build_file = "//bazel:ha_schema.BUILD.bazel",
+    sha256 = "38b8f846fb6191f9315da3df8ea7285881726c1507dc26d0d73a78c17fbf96c3",
+    strip_prefix = "sonic-dash-api-18a29c1c8a21aeb22a4893c786564acaf8212156",
+    type = "tar.gz",
+    urls = ["https://codeload.github.com/securely1g/sonic-dash-api/tar.gz/18a29c1c8a21aeb22a4893c786564acaf8212156"],
+)
+
+# Target libraries used to derive the installed Debian dependency controls.
+apt.install(
+    dependency_set = "dash_runtime_debian",
+    packages = ["libprotobuf32t64"],
+    suites = [
+        "trixie",
+        "trixie-updates",
+        "trixie-security",
+    ],
+)
+use_repo(apt, "dash_runtime_debian")
