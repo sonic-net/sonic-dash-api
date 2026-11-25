@@ -1,0 +1,114 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+load("@rules_python//python:defs.bzl", "py_test")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "ha_schema.BUILD.bazel",
+    "python_test_runner.py",
+    "requirements_lock.txt",
+])
+
+cc_test(
+    name = "runtime_consumer_test",
+    srcs = ["runtime_consumer.cc"],
+    args = [
+        "$(rootpath //:shared_library)",
+        "$(rootpath @protobuf_legacy//:shared_library)",
+    ],
+    copts = ["-std=c++14"],
+    data = [
+        "//:shared_library",
+        "@protobuf_legacy//:shared_library",
+    ],
+    linkopts = ["-ldl"],
+    linkstatic = False,
+    deps = ["//:dashapi"],
+)
+
+cc_test(
+    name = "utils_test",
+    srcs = [
+        "utils_test_main.cpp",
+        "//misc:tests/utils_unittest.cpp",
+    ],
+    args = ["$(rootpath //:proto/types.proto)"],
+    copts = [
+        "-std=c++14",
+        '-DPROTO_PATH=\\"proto\\"',
+    ],
+    data = [
+        "//:proto/types.proto",
+        "//:proto_sources",
+        "@protobuf_legacy//:shared_library",
+    ],
+    # This suite calls Protobuf indirectly through libdashapi. Load the exact
+    # declared runtime before the loader follows that transitive dependency.
+    env = {"LD_PRELOAD": "$(rootpath @protobuf_legacy//:shared_library)"},
+    # Debian's Boost meta-packages provide search paths and declared files;
+    # select the two libraries used by the existing Make test explicitly.
+    linkopts = [
+        "-lboost_filesystem",
+        "-lboost_system",
+    ],
+    linkstatic = False,
+    deps = [
+        "//:dashapi",
+        "@com_google_googletest//:gtest",
+        "@dash_test_debian//libboost-filesystem-dev:libboost-filesystem",
+        "@dash_test_debian//libboost-system-dev:libboost-system",
+    ],
+)
+
+test_suite(
+    name = "python_test",
+    tests = ["//misc:python_test"],
+)
+
+py_test(
+    name = "source_contract_test",
+    srcs = ["source_contract_test.py"],
+    args = [
+        "--runtime-tar=$(rootpath //:libdashapi_pkg)",
+        "--debug-tar=$(rootpath //:libdashapi_pkg.debug_symbols)",
+        "--protobuf-runtime-tar=$(rootpath //:protobuf_runtime_pkg)",
+        "--protobuf-debug-tar=$(rootpath //:protobuf_debug_pkg)",
+        "--library=$(rootpath //:shared_library)",
+        "--proto-paths",
+        "$(rootpaths //:proto_sources)",
+    ] + select({
+        "@platforms//cpu:arm64": ["--architecture=arm64"],
+        "@platforms//cpu:x86_64": ["--architecture=amd64"],
+    }),
+    data = [
+        "//:libdashapi_pkg",
+        "//:libdashapi_pkg.debug_symbols",
+        "//:proto_sources",
+        "//:protobuf_debug_pkg",
+        "//:protobuf_runtime_pkg",
+        "//:shared_library",
+    ],
+)
+
+genrule(
+    name = "ha_schema_descriptor",
+    srcs = [
+        "//:ha_schema_sources",
+        "@dash_ha_schema//:proto/types.proto",
+    ],
+    outs = ["ha_schema.pb"],
+    cmd = "$(location @protobuf_legacy//:protoc) -I$$(dirname $(location @dash_ha_schema//:proto/types.proto)) --include_imports --descriptor_set_out=$@ $(locations //:ha_schema_sources)",
+    tools = ["@protobuf_legacy//:protoc"],
+)
+
+py_test(
+    name = "ha_schema_test",
+    srcs = ["ha_schema_test.py"],
+    args = ["$(rootpath :ha_schema_descriptor)"] + ["$(rootpaths //:ha_schema_sources)"],
+    data = [
+        ":ha_schema_descriptor",
+        "//:ha_schema_sources",
+    ],
+    python_version = "3.13",
+    deps = ["@dash_pypi//protobuf"],
+)

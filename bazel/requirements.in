@@ -1,0 +1,4 @@
+# Runtime bindings used by the generated package and the existing CLI tests.
+click==8.4.2
+protobuf==6.33.5
+pytest==9.1.1

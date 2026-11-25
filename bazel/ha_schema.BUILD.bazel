@@ -1,0 +1,8 @@
+# Unmodified schema sources selected by sonic-dash-ha's native Git submodule.
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "proto/ha_scope_config.proto",
+    "proto/ha_set_config.proto",
+    "proto/types.proto",
+])
