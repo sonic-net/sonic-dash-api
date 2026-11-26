@@ -78,7 +78,7 @@ http_archive(
     sha256 = "38b8f846fb6191f9315da3df8ea7285881726c1507dc26d0d73a78c17fbf96c3",
     strip_prefix = "sonic-dash-api-18a29c1c8a21aeb22a4893c786564acaf8212156",
     type = "tar.gz",
-    urls = ["https://codeload.github.com/securely1g/sonic-dash-api/tar.gz/18a29c1c8a21aeb22a4893c786564acaf8212156"],
+    urls = ["https://codeload.github.com/sonic-net/sonic-dash-api/tar.gz/18a29c1c8a21aeb22a4893c786564acaf8212156"],
 )
 
 # Target libraries used to derive the installed Debian dependency controls.
